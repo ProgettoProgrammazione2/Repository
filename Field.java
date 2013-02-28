@@ -19,19 +19,47 @@ public class Field extends JFrame{
 	private boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
 	private boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
 	private Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
+	private Container contentPane = getContentPane();
+	fieldButtons[][] buttons;
 	public Field(){
 		super("The Game Of Life");
-		actionOnExit();									//dimensioni di default
-		getContentPane().setLayout(null);
+		
+		//definisco come si deve comportare il frame se esco
+		actionOnExit();		
+		
+		//container
+		contentPane.setLayout(null);
+		
+		//faccio definire all'utente le dimensioni iniziali
 		startingOptions start = new startingOptions();
+		
+		//aspetto che l'utente finisca
 		while(!endSelect);
 		setDimension(sizeSelected[0],sizeSelected[1]);
+		
+		//creo i bottoni e li inserisco nel frame
+		createButtons(sizeSelected[0],sizeSelected[1]);
+		
+		pack();
 		this.setVisible(true);
 	}
-	public void actionOnExit(){
+	private void createButtons(int x, int y){
+		int xButtons = (int)x/10;							//numero di bottoni orrizzontali
+		int yButtons = (int)y/10;							//numero di bottoni verticali
+		int i=0;
+		int j=0;
+		buttons = new fieldButtons[xButtons][yButtons];
+		for(i = 0; i <= xButtons; i++){
+			for(j = 0; j <= yButtons; j++){
+				buttons[i][j].posizionaIn(i, j);
+				contentPane.add(buttons[i][j]);
+			}
+		}
+	}
+	private void actionOnExit(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	public void setDimension(int x, int y){
+	private void setDimension(int x, int y){
 		int xSize = x;
 		int ySize = y;
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
