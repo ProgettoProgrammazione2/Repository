@@ -2,6 +2,8 @@ package it.univr.GameOfLife;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -50,7 +52,7 @@ public class Field extends JFrame{
 			//creo i 3 JRADIOBUTTON
 			JRadioButton r1 = new JRadioButton("250x250");
 			JRadioButton r2 = new JRadioButton("500x500");
-			JRadioButton r3 = new JRadioButton("1000x1000");
+			JRadioButton r3 = new JRadioButton("Full screen");
 			//creo e aggiungo il listener dei radiobutton
 			ActionListener listener = new JRadioButtonListener();
 			r1.addActionListener(listener);
@@ -109,8 +111,9 @@ public class Field extends JFrame{
 				sizeSelected[1]=500;
 			}
 			if(r3.isSelected()){
-				sizeSelected[0]=1000;
-				sizeSelected[1]=1000;
+				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+				sizeSelected[0]=(int)screen.getWidth();
+				sizeSelected[1]=(int)screen.getHeight();
 			}
 			this.setVisible(false);
 			endSelect = true;
