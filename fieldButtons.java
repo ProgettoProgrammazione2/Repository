@@ -9,7 +9,7 @@ public class fieldButtons extends JButton{
 	private int colonna = 0;
 	private static int DIMENSIONE = 10;
 	protected fieldButtons(){
-		super();
+		super("");
 	}
 	public final void posizionaIn(int riga, int colonna) {
 		this.riga = riga;

@@ -28,8 +28,8 @@ public class Field extends JFrame{
 		actionOnExit();		
 		
 		//container
-		contentPane.setLayout(null);
-		
+		//contentPane.setLayout(null);
+		getContentPane().setLayout(null);
 		//faccio definire all'utente le dimensioni iniziali
 		startingOptions start = new startingOptions();
 		
@@ -49,9 +49,10 @@ public class Field extends JFrame{
 		int i=0;
 		int j=0;
 		buttons = new fieldButtons[xButtons][yButtons];
-		for(i = 0; i <= xButtons; i++){
-			for(j = 0; j <= yButtons; j++){
-				buttons[i][j].posizionaIn(i, j);
+		for(i = 0; i < xButtons; i++){
+			for(j = 0; j < yButtons; j++){
+				buttons[i][j] = new fieldButtons();
+				buttons[i][j].posizionaIn(i,j);
 				contentPane.add(buttons[i][j]);
 			}
 		}
