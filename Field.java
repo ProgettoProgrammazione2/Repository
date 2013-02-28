@@ -14,14 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 public class Field extends JFrame{
-	private int sizeSelected[] = new int[2];
-	private boolean sizeSelect = false;
-	private boolean endSelect = false;
-	private boolean radioButtonClicked = false;
+	private int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
+	private boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
+	private boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
+	private boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
+	private Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
 	public Field(){
 		super("The Game Of Life");
-		//dimensioni di default
-		actionOnExit();
+		actionOnExit();									//dimensioni di default
 		getContentPane().setLayout(null);
 		startingOptions start = new startingOptions();
 		while(!endSelect);
@@ -34,9 +34,13 @@ public class Field extends JFrame{
 	public void setDimension(int x, int y){
 		int xSize = x;
 		int ySize = y;
-
+		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
+		int yLocation = ((int)screen.getHeight()/2) - (y/2);
 		setSize(xSize, ySize);
-		setResizable(false);//non è modificabile
+		setResizable(false);							//non è modificabile
+		if(xSize==ySize){								//siamo nel caso delle impostazioni 250x250
+					setLocation(xLocation,yLocation);	//o 500x500
+		}
 		
 	}
 	/*
@@ -52,7 +56,7 @@ public class Field extends JFrame{
 			//creo i 3 JRADIOBUTTON
 			JRadioButton r1 = new JRadioButton("250x250");
 			JRadioButton r2 = new JRadioButton("500x500");
-			JRadioButton r3 = new JRadioButton("Full screen");
+			JRadioButton r3 = new JRadioButton("Schermo intero");
 			//creo e aggiungo il listener dei radiobutton
 			ActionListener listener = new JRadioButtonListener();
 			r1.addActionListener(listener);
@@ -62,6 +66,11 @@ public class Field extends JFrame{
 			//imposto la grandezza del frame
 			setBounds(100,200,400,400);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			//lo sposto al centro dello schermo
+			int xLocation = ((int)screen.getWidth()/2) - 100; //valori pressochè casuali, da testare su computer diversi
+			int yLocation = ((int)screen.getHeight()/2) - 100;
+			setLocation(xLocation,yLocation);
 			
 			//aggiungo gli elementi al container
 			Container contentPane = getContentPane();
@@ -102,16 +111,19 @@ public class Field extends JFrame{
 					}
 				}
 			};
+			//250x250
 			if(r1.isSelected() ){
 				sizeSelected[0]=250;
 				sizeSelected[1]=250;
 			}
+			//500x500
 			if(r2.isSelected() ){
 				sizeSelected[0]=500;
 				sizeSelected[1]=500;
 			}
+			//schermo intero
 			if(r3.isSelected()){
-				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+				
 				sizeSelected[0]=(int)screen.getWidth();
 				sizeSelected[1]=(int)screen.getHeight();
 			}
