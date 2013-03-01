@@ -6,14 +6,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class Field extends JFrame{
+public class Field<SliderChangeListener> extends JFrame{
 	
 	private int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
 	
@@ -199,10 +203,48 @@ public class Field extends JFrame{
 			this.setResizable(false);
 			this.setLocation(125,200);
 			
+			//aggiungo label e scrollbar
+			JLabel l1 = new JLabel("Imposta la velocitˆ");
+			Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+			labelTable.put(new Integer(1), new JLabel("1"));
+			labelTable.put(new Integer(2), new JLabel("2"));
+			labelTable.put(new Integer(3), new JLabel("3"));
+			labelTable.put(new Integer(4), new JLabel("4"));
+			labelTable.put(new Integer(5), new JLabel("5"));
+			labelTable.put(new Integer(6), new JLabel("6"));
+			labelTable.put(new Integer(7), new JLabel("7"));
+			labelTable.put(new Integer(8), new JLabel("8"));
+			labelTable.put(new Integer(9), new JLabel("9"));
+			labelTable.put(new Integer(10), new JLabel("10"));
+			l1.setBounds(70,50, 200, 25);
+
+			final JLabel selected = new JLabel("Velocitˆ selezionata: 1");
+			selected.setBounds(57,120,200,20);
+			
+			JSlider slider = new JSlider(JSlider.HORIZONTAL,1,10,1);
+			slider.setBounds(30, 70, 200, 40);
+			slider.setPaintTicks(true);
+			slider.setMajorTickSpacing(9);
+			slider.setMinorTickSpacing(1);
+			slider.setLabelTable(labelTable);
+			slider.setPaintLabels(true);
+			slider.addChangeListener(new ChangeListener() {
+			      public void stateChanged(ChangeEvent e) {
+			    	  JSlider source = (JSlider)e.getSource();
+			    	  selected.setText("Velocitˆ selezionata: "+ source.getValue());
+			      }
+			    });
+			
+			
 			//aggiungo il bottone start
 			JButton start = new JButton("START");
 			start.setBounds(75,400,100,25);
+			
+			//aggiungo i componenti
+			contentPane.add(l1);
+			contentPane.add(slider);
 			contentPane.add(start);
+			contentPane.add(selected);
 			
 			this.setVisible(true);
 		}
