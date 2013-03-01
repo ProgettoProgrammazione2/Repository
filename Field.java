@@ -76,14 +76,11 @@ public class Field<SliderChangeListener> extends JFrame{
 	private void setDimension(int x, int y){
 		int xSize = x;
 		int ySize = y;
-		System.out.print(x + "x" + y);
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
 		int yLocation = ((int)screen.getHeight()/2) - (y/2);
 		this.setSize(xSize, ySize);
 		this.setResizable(false);							//non è modificabile
-		if(xSize==ySize){								//siamo nel caso delle impostazioni 250x250
-					setLocation(xLocation,yLocation);	//o 500x500
-		}
+		setLocation(xLocation,yLocation);
 		
 	}
 	/*
@@ -99,7 +96,7 @@ public class Field<SliderChangeListener> extends JFrame{
 			//creo i 3 JRADIOBUTTON
 			JRadioButton r1 = new JRadioButton("250x250");
 			JRadioButton r2 = new JRadioButton("500x500");
-			JRadioButton r3 = new JRadioButton("Schermo intero");
+			JRadioButton r3 = new JRadioButton("750x750");
 			//creo e aggiungo il listener dei radiobutton
 			ActionListener listener = new JRadioButtonListener();
 			r1.addActionListener(listener);
@@ -158,20 +155,19 @@ public class Field<SliderChangeListener> extends JFrame{
 			if(r1.isSelected() ){
 				sizeSelected[0]=250;
 				sizeSelected[1]=250;
-			}
-			//500x500
-			if(r2.isSelected() ){
+			}else if(r2.isSelected() ){
+				sizeSelected[0]=500;
+				sizeSelected[1]=500;
+			}else if(r3.isSelected()){
+				sizeSelected[0]=750;
+				sizeSelected[1]=750;
+			}else{
 				sizeSelected[0]=500;
 				sizeSelected[1]=500;
 			}
-			//schermo intero
-			if(r3.isSelected()){
-				
-				sizeSelected[0]=(int)screen.getWidth();
-				sizeSelected[1]=(int)screen.getHeight();
-			}
 			this.setVisible(false);
 			endSelect = true;
+			this.dispose();				//libero le risorse che utilizzava
 		}
 	}
 	private class ClickButton implements ActionListener {
@@ -193,15 +189,24 @@ public class Field<SliderChangeListener> extends JFrame{
 	private class Widget extends JFrame{
 		private Widget(){
 			super("GameOfLife - Strumenti di gioco");
+			
+			int xLocation = 0;//in questo modo si troverà sempre a fianco del frame
+			
+			if(sizeSelected[0] == 250){
+				xLocation = ((int)screen.getWidth()/2) - 500;
+			}else if(sizeSelected[0] == 500){
+				xLocation = ((int)screen.getWidth()/2) - 600;
+			}else{
+				xLocation = ((int)screen.getWidth()/2) - 700;
+			}
 			Container contentPane = getContentPane();
 			contentPane.setLayout(null);
-			
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			
 			//posiziono la finestra
 			this.setSize(250,500);
 			this.setResizable(false);
-			this.setLocation(125,200);
+			this.setLocation(xLocation,200);
 			
 			//aggiungo label e scrollbar
 			JLabel l1 = new JLabel("Imposta la velocità");
