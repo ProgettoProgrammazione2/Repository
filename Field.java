@@ -14,11 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Field<SliderChangeListener> extends JFrame{
-	
+public class Field extends JFrame{
+
 	private int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
 	
 	private boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
@@ -32,6 +34,12 @@ public class Field<SliderChangeListener> extends JFrame{
 	private Container contentPane = getContentPane();
 	
 	fieldButtons[][] buttons;							//i bottoni sul campo
+	
+	private int gameSpeed = 1;							//velocitˆ di gioco
+	
+	private boolean startTheGame = false;				//quando vale true il gioco parte
+	
+	private boolean isWhite = true;
 	
 	public Field(){
 		super("The Game Of Life");
@@ -55,6 +63,7 @@ public class Field<SliderChangeListener> extends JFrame{
 		//creo il widget che mi permette di far partire il gioco;
 		Widget menu = new Widget();
 		this.setVisible(true);
+		
 	}
 	private void createButtons(int x, int y){
 		int xButtons = (int)x/10;							//numero di bottoni orrizzontali
@@ -122,7 +131,12 @@ public class Field<SliderChangeListener> extends JFrame{
 			contentPane.add(bottoneOK,BorderLayout.SOUTH);
 
 			//aggiungo un listener al bottone cosi quando clicco registro l'azione
-			bottoneOK.addActionListener(new ClickButton());
+			bottoneOK.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					sizeSelect = true;
+				}
+				
+			});
 			setResizable(false);
 			pack();
 			this.setVisible(true);
@@ -169,13 +183,6 @@ public class Field<SliderChangeListener> extends JFrame{
 			endSelect = true;
 			this.dispose();				//libero le risorse che utilizzava
 		}
-	}
-	private class ClickButton implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			sizeSelect = true;
-		}
-		
 	}
 	private class JRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -236,7 +243,8 @@ public class Field<SliderChangeListener> extends JFrame{
 			slider.addChangeListener(new ChangeListener() {
 			      public void stateChanged(ChangeEvent e) {
 			    	  JSlider source = (JSlider)e.getSource();
-			    	  selected.setText("Velocitˆ selezionata: "+ source.getValue());
+			    	  gameSpeed = source.getValue();
+			    	  selected.setText("Velocitˆ selezionata: "+ gameSpeed);
 			      }
 			    });
 			
@@ -244,6 +252,12 @@ public class Field<SliderChangeListener> extends JFrame{
 			//aggiungo il bottone start
 			JButton start = new JButton("START");
 			start.setBounds(75,400,100,25);
+			start.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					startTheGame = true;
+				}
+				
+			});
 			
 			//aggiungo i componenti
 			contentPane.add(l1);
