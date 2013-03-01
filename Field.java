@@ -33,13 +33,13 @@ public class Field extends JFrame{
 	
 	private Container contentPane = getContentPane();
 	
-	fieldButtons[][] buttons;							//i bottoni sul campo
+	private fieldButtons[][] buttons;							//i bottoni sul campo
 	
 	private int gameSpeed = 1;							//velocità di gioco
 	
 	private boolean startTheGame = false;				//quando vale true il gioco parte
 	
-	private boolean isWhite = true;
+	private boolean firstTime = true;
 	
 	public Field(){
 		super("The Game Of Life");
@@ -62,8 +62,24 @@ public class Field extends JFrame{
 		
 		//creo il widget che mi permette di far partire il gioco;
 		Widget menu = new Widget();
+		
 		this.setVisible(true);
 		
+		//inizio il gioco
+		start();
+		
+	}
+	private void start(){
+		do{
+		}while(true);
+												//devo far capire ai bottoni che sono in gioco
+	}
+	private void setButtons(){
+		for(fieldButtons[] rowButtons : buttons){
+			for(fieldButtons p : rowButtons){
+				p.isInGame(true);
+			}
+		}
 	}
 	private void createButtons(int x, int y){
 		int xButtons = (int)x/10;							//numero di bottoni orrizzontali
@@ -255,6 +271,11 @@ public class Field extends JFrame{
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					startTheGame = true;
+					if(firstTime){			//se è la prima volta che lo premo
+						setButtons();
+						firstTime=false;
+						System.out.println("Hei");
+					}
 				}
 				
 			});

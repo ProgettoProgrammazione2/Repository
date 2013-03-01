@@ -21,7 +21,7 @@ public class fieldButtons extends JButton{
 				if(getBackground() == Color.white && !gameOn){
 					setBackground(Color.black); //se sono ancora in fase pre gioco lo creo
 				}else if(getBackground() == Color.black && gameOn){ 
-					setBackground(Color.black); //lo uccido se sono in gioco
+					setBackground(Color.white); //lo uccido se sono in gioco
 				}else{
 					//nothing to do
 				}
