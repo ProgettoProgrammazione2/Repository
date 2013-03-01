@@ -14,13 +14,21 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 public class Field extends JFrame{
+	
 	private int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
+	
 	private boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
+	
 	private boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
+	
 	private boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
+	
 	private Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
+	
 	private Container contentPane = getContentPane();
-	fieldButtons[][] buttons;
+	
+	fieldButtons[][] buttons;							//i bottoni sul campo
+	
 	public Field(){
 		super("The Game Of Life");
 		
@@ -28,7 +36,7 @@ public class Field extends JFrame{
 		actionOnExit();		
 		
 		//container
-		//contentPane.setLayout(null);
+		contentPane.setLayout(null);
 		getContentPane().setLayout(null);
 		//faccio definire all'utente le dimensioni iniziali
 		startingOptions start = new startingOptions();
@@ -40,7 +48,8 @@ public class Field extends JFrame{
 		//creo i bottoni e li inserisco nel frame
 		createButtons(sizeSelected[0],sizeSelected[1]);
 		
-		pack();
+		//creo il widget che mi permette di far partire il gioco;
+		Widget menu = new Widget();
 		this.setVisible(true);
 	}
 	private void createButtons(int x, int y){
@@ -63,10 +72,11 @@ public class Field extends JFrame{
 	private void setDimension(int x, int y){
 		int xSize = x;
 		int ySize = y;
+		System.out.print(x + "x" + y);
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
 		int yLocation = ((int)screen.getHeight()/2) - (y/2);
-		setSize(xSize, ySize);
-		setResizable(false);							//non è modificabile
+		this.setSize(xSize, ySize);
+		this.setResizable(false);							//non è modificabile
 		if(xSize==ySize){								//siamo nel caso delle impostazioni 250x250
 					setLocation(xLocation,yLocation);	//o 500x500
 		}
@@ -170,6 +180,31 @@ public class Field extends JFrame{
 	private class JRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			radioButtonClicked = true;
+		}
+	}
+	/*
+	 * La classe Widget permette di creare un frame che permette la gestione della velocità di gioco
+	 * la sua messa in pausa e la partenza del gioco stesso
+	 * */
+	private class Widget extends JFrame{
+		private Widget(){
+			super("GameOfLife - Strumenti di gioco");
+			Container contentPane = getContentPane();
+			contentPane.setLayout(null);
+			
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			
+			//posiziono la finestra
+			this.setSize(250,500);
+			this.setResizable(false);
+			this.setLocation(125,200);
+			
+			//aggiungo il bottone start
+			JButton start = new JButton("START");
+			start.setBounds(75,400,100,25);
+			contentPane.add(start);
+			
+			this.setVisible(true);
 		}
 	}
 }
