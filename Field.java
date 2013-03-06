@@ -21,25 +21,27 @@ import javax.swing.event.ChangeListener;
 
 public class Field extends JFrame{
 
-	private int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
+	private static int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
 	
-	private boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
+	private static boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
 	
-	private boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
+	private static boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
 	
-	private boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
+	private static boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
 	
-	private Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
+	private static Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
 	
 	private Container contentPane = getContentPane();
 	
-	private fieldButtons[][] buttons;							//i bottoni sul campo
+	private static fieldButtons[][] buttons;							//i bottoni sul campo
 	
-	private int gameSpeed = 1;							//velocità di gioco
+	private static int gameSpeed = 1;							//velocità di gioco
 	
-	private boolean startTheGame = false;				//quando vale true il gioco parte
+	private static boolean startTheGame = false;				//quando vale true il gioco parte
 	
-	private boolean firstTime = true;
+	private static boolean firstTime = true;
+	
+	private static final int[] velocity = {100,90,80,70,60,50,40,20,10,5};
 	
 	public Field(){
 		super("The Game Of Life");
@@ -66,13 +68,62 @@ public class Field extends JFrame{
 		this.setVisible(true);
 		
 		//inizio il gioco
-		start();
+		start(buttons);
 		
 	}
-	private void start(){
+	private void start(fieldButtons[][] buttons){
+		Controller[] c = new Controller[5];
+		int num = buttons.length / 5; // num di righe per thread
+		int x = 1;
+		int y = 0;
+		int z = 0;
+		while(y < 5){
+			fieldButtons[][] temp = new fieldButtons[num][num*5];
+			for(int i = y*num; i < x*num; i++){
+				for(int j = 0; j < num * 5; j++){
+					temp[z][j] = new fieldButtons();
+					temp[z][j] = buttons[i][j];
+				}
+				z++;
+			}
+			c[y] = new Controller(temp);
+			x++;
+			y++;
+			z = 0;
+			temp = null;
+		}
+		for(x = 0; x < c.length; x++){
+			c[x].start();
+		}
+		while(!startTheGame){
+			sleepFor(5);
+		}
 		do{
+			while(y < 5){
+				fieldButtons[][] temp = new fieldButtons[num][num*5];
+				for(int i = y*num; i < x*num; i++){
+					for(int j = 0; j < num * 5; j++){
+						temp[z][j] = new fieldButtons();
+						temp[z][j] = buttons[i][j];
+					}
+					z++;
+				}
+				c[y].setButtons(temp);
+				x++;
+				y++;
+				z = 0;
+				temp = null;
+			}
+
+			sleepFor(velocity[gameSpeed]);
 		}while(true);
 												//devo far capire ai bottoni che sono in gioco
+	}
+	private void sleepFor(int milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+		}
 	}
 	private void setButtons(){
 		for(fieldButtons[] rowButtons : buttons){
@@ -274,7 +325,6 @@ public class Field extends JFrame{
 					if(firstTime){			//se è la prima volta che lo premo
 						setButtons();
 						firstTime=false;
-						System.out.println("Hei");
 					}
 				}
 				

@@ -18,10 +18,10 @@ public class fieldButtons extends JButton{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(getBackground() == Color.white && !gameOn){
-					setBackground(Color.black); //se sono ancora in fase pre gioco lo creo
-				}else if(getBackground() == Color.black && gameOn){ 
-					setBackground(Color.white); //lo uccido se sono in gioco
+				if(getColor() == Color.white && !gameOn){
+					changeToBlack(); //se sono ancora in fase pre gioco lo creo
+				}else if(getColor() == Color.black && gameOn){ 
+					changeToWhite(); //lo uccido se sono in gioco
 				}else{
 					//nothing to do
 				}
@@ -31,12 +31,21 @@ public class fieldButtons extends JButton{
 	public void isInGame(boolean b){
 		gameOn = b;
 	}
+	public void changeToBlack(){
+		setBackground(Color.black);
+	}
+	public void changeToWhite(){
+		setBackground(Color.white);
+	}
+	public Color getColor(){
+		return getBackground();
+	}
 	public final void posizionaIn(int riga, int colonna) {
 		this.riga = riga;
 		this.colonna = colonna;
 
 		setBounds(colonna * DIMENSIONE, riga * DIMENSIONE, DIMENSIONE, DIMENSIONE);
-		setBackground(Color.WHITE);
+		changeToWhite();
 	}
 
 }
