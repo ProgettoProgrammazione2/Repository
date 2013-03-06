@@ -41,7 +41,7 @@ public class Field extends JFrame{
 	
 	private static boolean firstTime = true;
 	
-	private static final int[] velocity = {100,90,80,70,60,50,40,20,10,5};
+	private static final int[] velocity = {1000,900,800,700,600,500,400,200,100,50};
 	
 	public Field(){
 		super("The Game Of Life");
@@ -72,6 +72,7 @@ public class Field extends JFrame{
 		
 	}
 	private void start(fieldButtons[][] buttons){
+		boolean first = true;
 		Controller[] c = new Controller[5];
 		int num = buttons.length / 5; // num di righe per thread
 		int x = 1;
@@ -92,13 +93,16 @@ public class Field extends JFrame{
 			z = 0;
 			temp = null;
 		}
-		for(x = 0; x < c.length; x++){
-			c[x].start();
-		}
 		while(!startTheGame){
 			sleepFor(5);
 		}
 		do{
+			if(first){
+				for(x = 0; x < c.length; x++){
+					c[x].start();
+				}
+				first = false;
+			}
 			while(y < 5){
 				fieldButtons[][] temp = new fieldButtons[num][num*5];
 				for(int i = y*num; i < x*num; i++){
@@ -109,27 +113,29 @@ public class Field extends JFrame{
 					z++;
 				}
 				c[y].setButtons(temp);
+				
 				x++;
 				y++;
 				z = 0;
 				temp = null;
 			}
-
-			sleepFor(velocity[gameSpeed]);
+			for(x = 0; x < c.length; x++){
+				c[x].sleepFor(velocity[gameSpeed]);
+			}
 		}while(true);
 												//devo far capire ai bottoni che sono in gioco
-	}
-	private void sleepFor(int milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-		}
 	}
 	private void setButtons(){
 		for(fieldButtons[] rowButtons : buttons){
 			for(fieldButtons p : rowButtons){
 				p.isInGame(true);
 			}
+		}
+	}
+	public void sleepFor(int milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
 		}
 	}
 	private void createButtons(int x, int y){
