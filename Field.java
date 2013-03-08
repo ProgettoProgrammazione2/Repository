@@ -33,7 +33,7 @@ public class Field extends JFrame{
 	
 	private Container contentPane = getContentPane();
 	
-	private static fieldButtons[][] buttons;							//i bottoni sul campo
+	private static fieldButtons[][] buttons, nextGen;							//i bottoni sul campo
 	
 	private static int gameSpeed = 1;							//velocitˆ di gioco
 	
@@ -41,7 +41,7 @@ public class Field extends JFrame{
 	
 	private static boolean firstTime = true;
 	
-	private static final int[] velocity = {1000,900,800,700,600,500,400,200,100,50};
+	private static final int[] velocity = {2000,1500,1000,700,600,500,400,200,100,50};
 	
 	public Field(){
 		super("The Game Of Life");
@@ -72,56 +72,48 @@ public class Field extends JFrame{
 		
 	}
 	private void start(fieldButtons[][] buttons){
-		boolean first = true;
-		Controller[] c = new Controller[5];
-		int num = buttons.length / 5; // num di righe per thread
-		int x = 1;
-		int y = 0;
-		int z = 0;
-		while(y < 5){
-			fieldButtons[][] temp = new fieldButtons[num][num*5];
-			for(int i = y*num; i < x*num; i++){
-				for(int j = 0; j < num * 5; j++){
-					temp[z][j] = new fieldButtons();
-					temp[z][j] = buttons[i][j];
-				}
-				z++;
-			}
-			c[y] = new Controller(temp);
-			x++;
-			y++;
-			z = 0;
-			temp = null;
-		}
+		Controllers[] c = new Controllers[5];
+		int i = 0;
+		int j = 1;
+		int num = buttons.length/5;
 		while(!startTheGame){
 			sleepFor(5);
 		}
 		do{
-			if(first){
-				for(x = 0; x < c.length; x++){
-					c[x].start();
+			//azzero la nextGen
+			for(fieldButtons[] b : nextGen){
+				for(fieldButtons butt : b){
+					butt.changeToWhite();
 				}
-				first = false;
 			}
-			while(y < 5){
-				fieldButtons[][] temp = new fieldButtons[num][num*5];
-				for(int i = y*num; i < x*num; i++){
-					for(int j = 0; j < num * 5; j++){
-						temp[z][j] = new fieldButtons();
-						temp[z][j] = buttons[i][j];
+			i = 0;
+			j = 1;
+			for(int x = 0; x < c.length; x++){
+				c[x] = new Controllers(i*num,(j*num) - 1);
+				c[x].start();
+				i++;
+				j++;
+			}
+			for(Controllers co : c){
+				co.run();
+				try {
+					co.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			for(i = 0; i < buttons.length; i++){
+				for(j = 0; j < buttons[0].length; j++){
+					if(nextGen[i][j].isBlack()){
+						buttons[i][j].changeToBlack();
+					}else{
+						buttons[i][j].changeToWhite();
 					}
-					z++;
 				}
-				c[y].setButtons(temp);
-				
-				x++;
-				y++;
-				z = 0;
-				temp = null;
 			}
-			for(x = 0; x < c.length; x++){
-				c[x].sleepFor(velocity[gameSpeed]);
-			}
+			repaint();
+			sleepFor(velocity[gameSpeed - 1]);
 		}while(true);
 												//devo far capire ai bottoni che sono in gioco
 	}
@@ -144,9 +136,11 @@ public class Field extends JFrame{
 		int i=0;
 		int j=0;
 		buttons = new fieldButtons[xButtons][yButtons];
+		nextGen = new fieldButtons[xButtons][yButtons];
 		for(i = 0; i < xButtons; i++){
 			for(j = 0; j < yButtons; j++){
 				buttons[i][j] = new fieldButtons();
+				nextGen[i][j] = new fieldButtons();
 				buttons[i][j].posizionaIn(i,j);
 				contentPane.add(buttons[i][j]);
 			}
@@ -255,6 +249,42 @@ public class Field extends JFrame{
 			this.setVisible(false);
 			endSelect = true;
 			this.dispose();				//libero le risorse che utilizzava
+		}
+	}
+	private class Controllers extends Thread{
+		private int start, end;
+		public Controllers(int start, int end){
+			this.start = start;
+			this.end = end;
+		}
+		public void run(){
+			int temp = 0;
+			for(int i = start; i <= end; i++){
+				for(int j = 0; j < buttons[0].length; j++){
+					temp = check(i,j);
+					if(temp == 3 && !buttons[i][j].isBlack()){
+						nextGen[i][j].changeToBlack();
+					}else if(temp !=3 && temp != 2 && buttons[i][j].isBlack()){
+						nextGen[i][j].changeToWhite();
+					}else{
+						nextGen[i][j].setColor(buttons[i][j].getColor());
+					}
+				}
+			}
+		}
+		public int check(int xPos,int yPos){
+			int counter = 0;
+			for(int i = -1;i < 2; i++){
+				for(int j = -1; j < 2; j++){
+					if(i != 0 || j != 0)
+						try{
+							if(buttons[xPos + i][yPos + j].isBlack()){
+								counter++;
+							}
+						}catch(ArrayIndexOutOfBoundsException e){}
+				}
+			}
+			return counter;
 		}
 	}
 	private class JRadioButtonListener implements ActionListener {
