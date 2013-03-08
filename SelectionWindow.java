@@ -147,9 +147,9 @@ class SelectionWindow extends JFrame implements ActionListener {
 	
 	public void ChangeIcon(int WhichFigure) {
 		if (WhichFigure == 1)
-			bottone1.setIcon(new ImageIcon("images/bottone1.gif"));
-		else if(WhichFigure == 2)
-			bottone2.setIcon(new ImageIcon("images/bottone2.gif"));
+			bottone1.setIcon(new ImageIcon("images/bottone1.gif"));			//se si è già selezionato un bottone
+		else if(WhichFigure == 2)							//e lo si vuole cambiare ChangeIcon lo riporta
+			bottone2.setIcon(new ImageIcon("images/bottone2.gif"));			//alla forma originaria
 		else if(WhichFigure == 3)
 			bottone3.setIcon(new ImageIcon("images/bottone3.gif"));
 		else if(WhichFigure == 4)
@@ -172,12 +172,6 @@ class SelectionWindow extends JFrame implements ActionListener {
 																		//main per mostrare la finestra
 	public static void main(String args[]) {
 		new SelectionWindow().setVisible(true);
-		//JFrame frame = new JFrame("Finestra di selezione");
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.setSize(85 * 3 + 20, 85 * 3 + 50);
-		//frame.setLocation(200, 200);
-		//frame.setContentPane(new Bag());
-		//frame.setVisible(true); 
-	}
+		}
 }
 
