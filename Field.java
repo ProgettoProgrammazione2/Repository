@@ -42,6 +42,16 @@ public class Field extends JFrame{
 	private static boolean firstTime = true;
 	
 	private static final int[] velocity = {2000,1500,1000,700,600,500,400,200,100,50};
+
+	private static JLabel generations;
+	
+	private static int generationNumber = 0;
+	
+	private boolean pause = false;
+	
+	private boolean isEmpty = false;
+	
+	private Widget menu;
 	
 	public Field(){
 		super("The Game Of Life");
@@ -63,12 +73,13 @@ public class Field extends JFrame{
 		createButtons(sizeSelected[0],sizeSelected[1]);
 		
 		//creo il widget che mi permette di far partire il gioco;
-		Widget menu = new Widget();
+		menu = new Widget();
 		
 		this.setVisible(true);
 		
 		//inizio il gioco
 		start(buttons);
+		
 		
 	}
 	private void start(fieldButtons[][] buttons){
@@ -76,11 +87,17 @@ public class Field extends JFrame{
 		int i = 0;
 		int j = 1;
 		int num = buttons.length/5;
-		while(!startTheGame){
-			sleepFor(5);
-		}
 		do{
+			while(!startTheGame){
+				sleepFor(5);
+			}
+			setButtons();
+			//ipotizzo che questa sia l'ultima
+			isEmpty = true;
 			//azzero la nextGen
+			while(pause){
+				sleepFor(200);
+			}
 			for(fieldButtons[] b : nextGen){
 				for(fieldButtons butt : b){
 					butt.changeToWhite();
@@ -107,13 +124,30 @@ public class Field extends JFrame{
 				for(j = 0; j < buttons[0].length; j++){
 					if(nextGen[i][j].isBlack()){
 						buttons[i][j].changeToBlack();
+						isEmpty = false;
 					}else{
 						buttons[i][j].changeToWhite();
 					}
 				}
 			}
+			generationNumber++;
+			generations.setText("GENERAZIONE #" + generationNumber);
 			repaint();
 			sleepFor(velocity[gameSpeed - 1]);
+			if(isEmpty){
+				generations.setBounds(50,150,200,20);
+				generations.setText("GENERAZIONI TERMINATE");
+				startTheGame = false;
+				for(i = 0; i < buttons.length; i++){
+					for(j = 0; j < buttons[0].length; j++){
+						buttons[i][j].isInGame(false);
+					}
+				}
+				generationNumber = 0;
+				sleepFor(2000);
+				generations.setBounds(70,150,200,20);
+				generations.setText("GENERAZIONE #");
+			}
 		}while(true);
 												//devo far capire ai bottoni che sono in gioco
 	}
@@ -168,7 +202,7 @@ public class Field extends JFrame{
 		private startingOptions(){
 			super("The Game Of Life");
 			//bottone
-			JButton bottoneOK = new JButton("Ok, procediamo");
+			JButton bottoneOK = new JButton("OK");
 			//creo i 3 JRADIOBUTTON
 			JRadioButton r1 = new JRadioButton("250x250");
 			JRadioButton r2 = new JRadioButton("500x500");
@@ -298,7 +332,7 @@ public class Field extends JFrame{
 	 * */
 	private class Widget extends JFrame{
 		private Widget(){
-			super("GameOfLife - Strumenti di gioco");
+			super("Strumenti di gioco");
 			
 			int xLocation = 0;//in questo modo si troverˆ sempre a fianco del frame
 			
@@ -334,7 +368,7 @@ public class Field extends JFrame{
 			l1.setBounds(70,50, 200, 25);
 
 			final JLabel selected = new JLabel("Velocitˆ selezionata: 1");
-			selected.setBounds(57,120,200,20);
+			selected.setBounds(60,120,200,20);
 			
 			JSlider slider = new JSlider(JSlider.HORIZONTAL,1,10,1);
 			slider.setBounds(30, 70, 200, 40);
@@ -351,10 +385,34 @@ public class Field extends JFrame{
 			      }
 			    });
 			
+			generations = new JLabel("GENERAZIONE # ");
+			generations.setBounds(70,150,200,20);
+			
+			JButton quit = new JButton("ESCI");
+			quit.setBounds(75,410,100,25);
+			quit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					System.exit(0);
+				}		
+			});
+			
+			final JButton pausa = new JButton("PAUSA");
+			pausa.setBounds(75,380,100,25);
+			pausa.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(pause){
+						pause = false;
+						pausa.setText("PAUSA");
+					}else{
+						pause = true;
+						pausa.setText("RIPRENDI");
+					}
+				}		
+			});
 			
 			//aggiungo il bottone start
 			JButton start = new JButton("START");
-			start.setBounds(75,400,100,25);
+			start.setBounds(75,350,100,25);
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					startTheGame = true;
@@ -369,7 +427,10 @@ public class Field extends JFrame{
 			//aggiungo i componenti
 			contentPane.add(l1);
 			contentPane.add(slider);
+			contentPane.add(quit);
 			contentPane.add(start);
+			contentPane.add(pausa);
+			contentPane.add(generations);
 			contentPane.add(selected);
 			
 			this.setVisible(true);
