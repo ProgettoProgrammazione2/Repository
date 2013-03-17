@@ -12,6 +12,10 @@ public class fieldButtons extends JButton{
 	private static int DIMENSIONE = 10;
 	private boolean gameOn = false;
 	private boolean black = false;
+	private boolean alreadyChecked = false;
+	private boolean userHasToDraw = false;
+	private boolean isChecked = false;
+	
 	protected fieldButtons(){
 		super("");	
 		setBackground(Color.WHITE);
@@ -20,12 +24,18 @@ public class fieldButtons extends JButton{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(userHasToDraw){
+					if(!alreadyChecked){
+						isChecked = true;
+						alreadyChecked = true;
+					}
+				}
 				if(getColor() == Color.white && !gameOn){
 					changeToBlack(); //se sono ancora in fase pre gioco lo creo
-					setToolTipText("xPos : " + riga + " yPos : "+ colonna + " alive");
+					setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " alive");
 				}else if(getColor() == Color.black && gameOn){ 
 					changeToWhite(); //lo uccido se sono in gioco
-					setToolTipText("xPos : " + riga + " yPos : "+ colonna + " died");
+					setToolTipText("xPos : " + (riga + 1) + " yPos : "+ (colonna + 1) + " died");
 				}else{
 					//nothing to do
 				}
@@ -34,6 +44,26 @@ public class fieldButtons extends JButton{
 	}
 	public boolean isBlack(){
 		return black;
+	}
+	public int getRow(){
+		return this.riga;
+	}
+	public int getColumn(){
+		return this.colonna;
+	}
+	public boolean Checked(){
+		return this.isChecked;
+	}
+	public void userHasToDraw(boolean b){
+		if(b){
+			this.userHasToDraw = true;
+			this.alreadyChecked = false;
+		}else{
+			this.userHasToDraw = false;
+			this.alreadyChecked = false;
+			this.isChecked = true;
+		}
+		
 	}
 	public void isInGame(boolean b){
 		gameOn = b;

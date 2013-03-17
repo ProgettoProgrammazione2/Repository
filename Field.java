@@ -33,7 +33,7 @@ public class Field extends JFrame{
 	
 	private Container contentPane = getContentPane();
 	
-	private static fieldButtons[][] buttons, nextGen;							//i bottoni sul campo
+	private static fieldButtons[][] buttons, nextGen, screenShot;							//i bottoni sul campo
 	
 	private static int gameSpeed = 1;							//velocitˆ di gioco
 	
@@ -47,17 +47,26 @@ public class Field extends JFrame{
 	
 	private static int generationNumber = 0;
 	
+	private static boolean screenShotSelected = false;
+	
 	private boolean pause = false;
 	
 	private boolean isEmpty = false;
+	
+	private boolean clear = false;
+	
+	private int matchNumber = 1;
 	
 	private Widget menu;
 	
 	public Field(){
 		super("The Game Of Life");
 		
+		Loader load = new Loader();
+		
 		//definisco come si deve comportare il frame se esco
 		actionOnExit();		
+		this.getContentPane().setBackground(Color.BLACK);
 		
 		//container
 		contentPane.setLayout(null);
@@ -89,28 +98,80 @@ public class Field extends JFrame{
 		int num = buttons.length/5;
 		do{
 			while(!startTheGame){
+				while(pietro.setFigure()){
+					for(fieldButtons[] b : buttons){
+						for(fieldButtons butt : b){
+							butt.userHasToDraw(true);
+						}
+					}
+					for(fieldButtons[] b : buttons){
+						for(fieldButtons butt : b){
+							if(butt.Checked()){
+								pietro.putFigure(butt.getRow();butt.getColumn(),buttons);
+								while(!pietro.setFigure()){
+									sleepFor(5);
+								}
+								//qui aggiorno la matrice principale
+							}
+						}
+					}
+					for(fieldButtons[] b : buttons){
+						for(fieldButtons butt : b){
+							butt.userHasToDraw(false);
+						}
+					}
+				}
 				sleepFor(5);
 			}
 			setButtons();
 			//ipotizzo che questa sia l'ultima
 			isEmpty = true;
-			//azzero la nextGen
+			
 			while(pause){
 				sleepFor(200);
 			}
+			
+			//azzero la nextGen
+			
 			for(fieldButtons[] b : nextGen){
 				for(fieldButtons butt : b){
 					butt.changeToWhite();
 				}
 			}
+			
+			while(pietro.setFigure()){
+				for(fieldButtons[] b : buttons){
+					for(fieldButtons butt : b){
+						butt.userHasToDraw(true);
+					}
+				}
+				for(fieldButtons[] b : buttons){
+					for(fieldButtons butt : b){
+						if(butt.Checked()){
+							pietro.putFigure(butt.getRow();butt.getColumn(),buttons);
+							while(!pietro.setFigure()){
+								sleepFor(5);
+							}
+							//qui aggiorno la matrice principale
+						}
+					}
+				}
+				for(fieldButtons[] b : buttons){
+					for(fieldButtons butt : b){
+						butt.userHasToDraw(false);
+					}
+				}	
+			}
 			i = 0;
 			j = 1;
+			
 			for(int x = 0; x < c.length; x++){
 				c[x] = new Controllers(i*num,(j*num) - 1);
 				c[x].start();
 				i++;
 				j++;
 			}
+			
 			for(Controllers co : c){
 				co.run();
 				try {
@@ -120,6 +181,7 @@ public class Field extends JFrame{
 					e.printStackTrace();
 				}
 			}
+			
 			for(i = 0; i < buttons.length; i++){
 				for(j = 0; j < buttons[0].length; j++){
 					if(nextGen[i][j].isBlack()){
@@ -130,6 +192,7 @@ public class Field extends JFrame{
 					}
 				}
 			}
+			
 			generationNumber++;
 			generations.setText("GENERAZIONE #" + generationNumber);
 			repaint();
@@ -138,15 +201,45 @@ public class Field extends JFrame{
 				generations.setBounds(50,150,200,20);
 				generations.setText("GENERAZIONI TERMINATE");
 				startTheGame = false;
+				generations.setBounds(65,150,200,20);
+				generations.setText("RICOMINCIO DA 0");
+				matchNumber++;
+				sleepFor(600);
 				for(i = 0; i < buttons.length; i++){
 					for(j = 0; j < buttons[0].length; j++){
 						buttons[i][j].isInGame(false);
 					}
 				}
+				generations.setBounds(35,150,200,20);
+				generations.setText("CAMPO OK, PARTITA NUMERO " + matchNumber);
+				sleepFor(700);
 				generationNumber = 0;
 				sleepFor(2000);
 				generations.setBounds(70,150,200,20);
 				generations.setText("GENERAZIONE #");
+			}
+			if(clear){
+				generations.setBounds(60,150,200,20);
+				generations.setText("STO PULENDO IL CAMPO");
+				sleepFor(200);
+				generations.setBounds(65,150,200,20);
+				generations.setText("RICOMINCIO DA 0");
+				matchNumber++;
+				sleepFor(600);
+				for(fieldButtons[] b : buttons){
+					for(fieldButtons butt : b){
+						butt.changeToWhite();
+						butt.isInGame(false);
+					}
+				}
+				generations.setBounds(35,150,200,20);
+				generations.setText("CAMPO OK, PARTITA NUMERO " + matchNumber);
+				sleepFor(700);
+				generationNumber = 0;
+				generations.setBounds(70,150,200,20);
+				generations.setText("GENERAZIONE #");
+				clear = false;
+				startTheGame=false;
 			}
 		}while(true);
 												//devo far capire ai bottoni che sono in gioco
@@ -171,10 +264,12 @@ public class Field extends JFrame{
 		int j=0;
 		buttons = new fieldButtons[xButtons][yButtons];
 		nextGen = new fieldButtons[xButtons][yButtons];
+		screenShot = new fieldButtons[xButtons][yButtons];
 		for(i = 0; i < xButtons; i++){
 			for(j = 0; j < yButtons; j++){
 				buttons[i][j] = new fieldButtons();
 				nextGen[i][j] = new fieldButtons();
+				screenShot[i][j] = new fieldButtons();
 				buttons[i][j].posizionaIn(i,j);
 				contentPane.add(buttons[i][j]);
 			}
@@ -185,7 +280,7 @@ public class Field extends JFrame{
 	}
 	private void setDimension(int x, int y){
 		int xSize = x;
-		int ySize = y;
+		int ySize = y+22;
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
 		int yLocation = ((int)screen.getHeight()/2) - (y/2);
 		this.setSize(xSize, ySize);
@@ -201,12 +296,19 @@ public class Field extends JFrame{
 	private class startingOptions extends JFrame{
 		private startingOptions(){
 			super("The Game Of Life");
+			this.getContentPane().setBackground(Color.BLACK);
 			//bottone
 			JButton bottoneOK = new JButton("OK");
 			//creo i 3 JRADIOBUTTON
 			JRadioButton r1 = new JRadioButton("250x250");
+			r1.setForeground(Color.white);
+			r1.setBackground(Color.black);
 			JRadioButton r2 = new JRadioButton("500x500");
+			r2.setForeground(Color.white);
+			r2.setBackground(Color.black);
 			JRadioButton r3 = new JRadioButton("750x750");
+			r3.setForeground(Color.white);
+			r3.setBackground(Color.black);
 			//creo e aggiungo il listener dei radiobutton
 			ActionListener listener = new JRadioButtonListener();
 			r1.addActionListener(listener);
@@ -225,7 +327,9 @@ public class Field extends JFrame{
 			//aggiungo gli elementi al container
 			Container contentPane = getContentPane();
 			contentPane.setLayout(new BorderLayout());
-			contentPane.add(new JLabel("SELEZIONA UNA DIMENSIONE"), BorderLayout.NORTH);
+			JLabel intro = new JLabel("SELEZIONA UNA DIMENSIONE");
+			intro.setForeground(Color.white);
+			contentPane.add(intro, BorderLayout.NORTH);
 			contentPane.add(r1,BorderLayout.WEST);
 			contentPane.add(r2,BorderLayout.CENTER);
 			contentPane.add(r3,BorderLayout.EAST);
@@ -346,7 +450,7 @@ public class Field extends JFrame{
 			Container contentPane = getContentPane();
 			contentPane.setLayout(null);
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			
+			this.getContentPane().setBackground(Color.BLACK);
 			//posiziono la finestra
 			this.setSize(250,500);
 			this.setResizable(false);
@@ -354,6 +458,7 @@ public class Field extends JFrame{
 			
 			//aggiungo label e scrollbar
 			JLabel l1 = new JLabel("Imposta la velocitˆ");
+			l1.setForeground(Color.white);
 			Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 			labelTable.put(new Integer(1), new JLabel("1"));
 			labelTable.put(new Integer(2), new JLabel("2"));
@@ -369,8 +474,10 @@ public class Field extends JFrame{
 
 			final JLabel selected = new JLabel("Velocitˆ selezionata: 1");
 			selected.setBounds(60,120,200,20);
+			selected.setForeground(Color.white);
 			
 			JSlider slider = new JSlider(JSlider.HORIZONTAL,1,10,1);
+			slider.setBackground(Color.black);
 			slider.setBounds(30, 70, 200, 40);
 			slider.setPaintTicks(true);
 			slider.setMajorTickSpacing(9);
@@ -387,11 +494,45 @@ public class Field extends JFrame{
 			
 			generations = new JLabel("GENERAZIONE # ");
 			generations.setBounds(70,150,200,20);
+			generations.setForeground(Color.white);
+			
+			final JButton screenshoot = new JButton("TAKE A SCREENSHOOT");
+			screenshoot.setBounds(27,190,200,25);
+			screenshoot.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(!screenShotSelected){
+						screenshoot.setText("REPLACE SCREENSHOOT");
+						screenShotSelected = true;
+						for(int i = 0; i < buttons.length; i++){
+							for(int j = 0; j < buttons[0].length; j++){
+								if(buttons[i][j].isBlack()){
+									screenShot[i][j].changeToBlack();
+								}else{
+									screenShot[i][j].changeToWhite();
+								}
+							}
+						}
+					}else{
+						screenShotSelected = false;
+						screenshoot.setText("TAKE A SCREENSHOOT");
+						for(int i = 0; i < buttons.length; i++){
+							for(int j = 0; j < buttons[0].length; j++){
+								if(screenShot[i][j].isBlack()){
+									buttons[i][j].changeToBlack();
+								}else{
+									buttons[i][j].changeToWhite();
+								}
+							}
+						}
+					}
+				}		
+			});
 			
 			JButton quit = new JButton("ESCI");
 			quit.setBounds(75,410,100,25);
 			quit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					dispose();
 					System.exit(0);
 				}		
 			});
@@ -411,8 +552,18 @@ public class Field extends JFrame{
 			});
 			
 			//aggiungo il bottone start
+			JButton restart = new JButton("RESTART");
+			restart.setBounds(75,350,100,25);
+			restart.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					clear = true;
+					firstTime=true;
+				}
+				
+			});
+			
 			JButton start = new JButton("START");
-			start.setBounds(75,350,100,25);
+			start.setBounds(75,320,100,25);
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					startTheGame = true;
@@ -428,12 +579,33 @@ public class Field extends JFrame{
 			contentPane.add(l1);
 			contentPane.add(slider);
 			contentPane.add(quit);
+			contentPane.add(restart);
 			contentPane.add(start);
 			contentPane.add(pausa);
+			contentPane.add(screenshoot);
 			contentPane.add(generations);
 			contentPane.add(selected);
 			
 			this.setVisible(true);
+		}
+	}
+	private class Loader extends JFrame{
+		public Loader(){
+			contentPane.setLayout(null);
+			getContentPane().setLayout(null);
+			int xLocation = ((int)screen.getWidth()/2) - (500/2);	//coordinate per spostare le finestre al centro dello schermo
+			int yLocation = ((int)screen.getHeight()/2) - (500/2);
+			setSize(570,480);
+			setLocation(xLocation,yLocation);
+			setUndecorated(true);
+			JButton intro = new JButton(new ImageIcon("images/screen.png"));
+			intro.setBounds(0,0,600,500);
+			intro.setBorderPainted(false);
+			intro.setVisible(true);
+			getContentPane().add(intro);
+			this.setVisible(true);
+			sleepFor(5000);
+			this.dispose();
 		}
 	}
 }
