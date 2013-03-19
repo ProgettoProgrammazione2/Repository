@@ -13,7 +13,7 @@ public class fieldButtons extends JButton{
 	private boolean gameOn = false;
 	private boolean black = false;
 	private boolean alreadyChecked = false;
-	private boolean userHasToDraw = false;
+	static boolean userHasToDraw = false;
 	private boolean isChecked = false;
 	
 	protected fieldButtons(){

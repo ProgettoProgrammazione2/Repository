@@ -51,11 +51,15 @@ public class Field extends JFrame{
 	
 	private boolean pause = false;
 	
+	private boolean done = false;
+	
 	private boolean isEmpty = false;
 	
 	private boolean clear = false;
 	
 	private int matchNumber = 1;
+	
+	private SelectionWindow select;
 	
 	private Widget menu;
 	
@@ -84,6 +88,8 @@ public class Field extends JFrame{
 		//creo il widget che mi permette di far partire il gioco;
 		menu = new Widget();
 		
+		select = new SelectionWindow(sizeSelected[0]);
+		
 		this.setVisible(true);
 		
 		new SelectionWindow().setVisible(true);
@@ -100,26 +106,30 @@ public class Field extends JFrame{
 		int num = buttons.length/5;
 		do{
 			while(!startTheGame){
-				while(pietro.setFigure()){
-					for(fieldButtons[] b : buttons){
-						for(fieldButtons butt : b){
-							butt.userHasToDraw(true);
+				while(select.SetFigure){
+					for(fieldButtons[] butt : buttons){
+						for(fieldButtons b : butt){
+							b.userHasToDraw(true);
 						}
 					}
-					for(fieldButtons[] b : buttons){
-						for(fieldButtons butt : b){
-							if(butt.Checked()){
-								pietro.putFigure(butt.getRow();butt.getColumn(),buttons);
-								while(!pietro.setFigure()){
-									sleepFor(5);
+						for(fieldButtons[] butt : buttons){
+							for(fieldButtons b : butt){
+								if(b.Checked()){
+									select.putFigure(b.getRow(),b.getColumn(),buttons);
+									sleepFor(10); //lasciagli il tempo di lavorare
+									done = true;
+									select.SetFigure = false;
 								}
-								//qui aggiorno la matrice principale
 							}
 						}
-					}
-					for(fieldButtons[] b : buttons){
-						for(fieldButtons butt : b){
-							butt.userHasToDraw(false);
+					for(i = 0; i < buttons.length; i++){
+						for(j = 0; j < buttons[0].length; j++){
+							if(select.buttons[i][j].isBlack()){
+								buttons[i][j].changeToBlack();
+							}else{
+								buttons[i][j].changeToWhite();
+							}
+							buttons[i][j].userHasToDraw(false);
 						}
 					}
 				}
@@ -140,30 +150,7 @@ public class Field extends JFrame{
 					butt.changeToWhite();
 				}
 			}
-			
-			while(pietro.setFigure()){
-				for(fieldButtons[] b : buttons){
-					for(fieldButtons butt : b){
-						butt.userHasToDraw(true);
-					}
-				}
-				for(fieldButtons[] b : buttons){
-					for(fieldButtons butt : b){
-						if(butt.Checked()){
-							pietro.putFigure(butt.getRow();butt.getColumn(),buttons);
-							while(!pietro.setFigure()){
-								sleepFor(5);
-							}
-							//qui aggiorno la matrice principale
-						}
-					}
-				}
-				for(fieldButtons[] b : buttons){
-					for(fieldButtons butt : b){
-						butt.userHasToDraw(false);
-					}
-				}	
-			}
+		
 			i = 0;
 			j = 1;
 			
