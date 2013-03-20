@@ -32,14 +32,21 @@ public class DrawFigure extends JButton {
 			
 			
 		
-						case 1:{//posiziono la figura 1		
+						case 1:{//posiziono la figura 1	
+							/*if(size - Column < 2 && size - Row < 2){
+								System.out.println("Non si ferma");
+								break;
+								
+							}
+							else{*/
 							System.out.println("Sono entrato in figura 1");
 							Field.buttons[Column + 1][Row].setBackground(Color.black);	//costruisco la figura dal bottone di partenza
 							Field.buttons[Column][Row].setBackground(Color.black);
 							Field.buttons[Column - 1][Row].setBackground(Color.black);
-							//SelectionWindow.bottone1.setBackground(Color.black);
-							SelectionWindow.SetFigure = false;	
+							
+							//SelectionWindow.SetFigure = false;	
 							System.out.println("Ho finito figura 1");//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							
 						};break;
 					
 						case 2:{
@@ -50,7 +57,7 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column + 1][Row + 1].setBackground(Color.black);
 							Field.buttons[Column + 1][Row - 1].setBackground(Color.black);
 							//SeletionWindow.ChangeIcon(2);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 					
 						};break;
 			
@@ -64,7 +71,7 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column + 1][Row + 2].setBackground(Color.black);
 							Field.buttons[Column + 2][Row + 1].setBackground(Color.black);
 							//SelectionWindow.bottone3.setBackground(Color.white);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
@@ -132,35 +139,35 @@ public class DrawFigure extends JButton {
 							
 							
 							//ChangeIcon(4);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
 		
 						case 5: {
-							Field.buttons[Column-1][Row-1].setBackground(Color.black);
+							Field.buttons[Column-1][Row].setBackground(Color.black);
 							Field.buttons[Column][Row+1].setBackground(Color.black);
-							Field.buttons[Column][Row-1].setBackground(Color.black);
+							Field.buttons[Column+1][Row-1].setBackground(Color.black);
 							Field.buttons[Column+1][Row].setBackground(Color.black);
 							Field.buttons[Column+1][Row+1].setBackground(Color.black);
-							//ChaneIcon(5);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.ChangeIcon(5);
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
 		
 						case 6: {
-							Field.buttons[Column-2][Row-1].setBackground(Color.black);
-							Field.buttons[Column-2][Row+1].setBackground(Color.black);
-							Field.buttons[Column-1][Row+2].setBackground(Color.black);
+							Field.buttons[Column-1][Row-2].setBackground(Color.black);
+							Field.buttons[Column-1][Row+1].setBackground(Color.black);
 							Field.buttons[Column][Row+2].setBackground(Color.black);
+							Field.buttons[Column+1][Row-2].setBackground(Color.black);
 							Field.buttons[Column+1][Row+2].setBackground(Color.black);
-							Field.buttons[Column+1][Row-1].setBackground(Color.black);
+							Field.buttons[Column+2][Row-1].setBackground(Color.black);
 							Field.buttons[Column+2][Row].setBackground(Color.black);
 							Field.buttons[Column+2][Row+1].setBackground(Color.black);
 							Field.buttons[Column+2][Row+2].setBackground(Color.black);						
 							//ChangeIcon(5);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
@@ -183,7 +190,7 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column-3][Row].setBackground(Color.black);
 							Field.buttons[Column+3][Row].setBackground(Color.black);
 							//ChangeIcon(7);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
@@ -194,7 +201,7 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column][Row+1].setBackground(Color.black);
 							Field.buttons[Column+1][Row+1].setBackground(Color.black);
 							//ChangeIcon(8);
-							SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
 						};break;
 			
 		
@@ -216,11 +223,11 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column+2][Row-1].setBackground(Color.black);
 							Field.buttons[Column-3][Row].setBackground(Color.black);
 							Field.buttons[Column+3][Row].setBackground(Color.black);
-							SelectionWindow.SetFigure = false;
+							//SelectionWindow.SetFigure = false;
 						};break;			
 					}
 			}
-		//Field.ReadyToDraw = true;
+		Field.ReadyToDraw = true;
 		
 		}
 	}
