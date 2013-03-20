@@ -57,7 +57,7 @@ public class fieldButtons extends JButton{
 		}else{
 			this.userHasToDraw = false;
 			this.alreadyChecked = false;
-			this.isChecked = true;
+			this.isChecked = false;
 		}
 		
 	}

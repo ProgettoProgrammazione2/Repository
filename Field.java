@@ -112,16 +112,16 @@ public class Field extends JFrame{
 							b.userHasToDraw(true);
 						}
 					}
-						for(fieldButtons[] butt : buttons){
-							for(fieldButtons b : butt){
-								if(b.Checked()){
-									select.putFigure(b.getRow(),b.getColumn(),buttons);
-									sleepFor(10); //lasciagli il tempo di lavorare
-									done = true;
-									select.SetFigure = false;
-								}
+					for(fieldButtons[] butt : buttons){
+						for(fieldButtons b : butt){
+							if(b.Checked()){
+								select.putFigure(b.getRow(),b.getColumn(),buttons);
+								sleepFor(10); //lasciagli il tempo di lavorare
+								done = true;
+								select.SetFigure = false;
 							}
 						}
+					}
 					for(i = 0; i < buttons.length; i++){
 						for(j = 0; j < buttons[0].length; j++){
 							if(select.buttons[i][j].isBlack()){
