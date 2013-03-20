@@ -24,12 +24,8 @@ public class fieldButtons extends JButton{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(userHasToDraw){
-					if(!alreadyChecked){
-						isChecked = true;
-						alreadyChecked = true;
-					}
-				}
+				if(SelectionWindow.SetFigure)
+					DrawFigure.putFigure(e);					
 				if(getColor() == Color.white && !gameOn){
 					changeToBlack(); //se sono ancora in fase pre gioco lo creo
 					setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " alive");
