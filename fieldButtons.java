@@ -12,7 +12,6 @@ public class fieldButtons extends JButton{
 	private static int DIMENSIONE = 10;
 	private boolean gameOn = false;
 	private boolean black = false;
-	private boolean alreadyChecked = false;
 	static boolean userHasToDraw = false;
 	private boolean isChecked = false;
 	
@@ -24,17 +23,20 @@ public class fieldButtons extends JButton{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SelectionWindow.SetFigure)
-					DrawFigure.putFigure(e);					
-				if(getColor() == Color.white && !gameOn){
-					changeToBlack(); //se sono ancora in fase pre gioco lo creo
-					setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " alive");
-				}else if(getColor() == Color.black && gameOn){ 
-					changeToWhite(); //lo uccido se sono in gioco
-					setToolTipText("xPos : " + (riga + 1) + " yPos : "+ (colonna + 1) + " died");
+                if(SelectionWindow.SetFigure){
+					Field.drawer.putFigure(e);
 				}else{
-					//nothing to do
+					if(getColor() == Color.white && !gameOn){
+						changeToBlack(); //se sono ancora in fase pre gioco lo creo
+						setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " alive");
+					}else if(getColor() == Color.black && gameOn){ 
+						changeToWhite(); //lo uccido se sono in gioco
+						setToolTipText("xPos : " + (riga + 1) + " yPos : "+ (colonna + 1) + " died");
+					}else{
+						//nothing to do
+					}
 				}
+
 			}
 		});
 	}
@@ -53,10 +55,8 @@ public class fieldButtons extends JButton{
 	public void userHasToDraw(boolean b){
 		if(b){
 			this.userHasToDraw = true;
-			this.alreadyChecked = false;
 		}else{
 			this.userHasToDraw = false;
-			this.alreadyChecked = false;
 			this.isChecked = false;
 		}
 		

@@ -27,15 +27,19 @@ public class Field extends JFrame{
 	
 	private static boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
 	
-	private static boolean radioButtonClicked = false;			//vale true se un radio button ÔøΩ stato selezionato
+	private static boolean radioButtonClicked = false;			//vale true se un radio button è stato selezionato
 	
 	private static Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
 	
 	private Container contentPane = getContentPane();
 	
-	private static fieldButtons[][] buttons, nextGen, screenShot;							//i bottoni sul campo
+	static fieldButtons[][] buttons;							//i bottoni sul campo
+
+	static fieldButtons[][] nextGen;
+
+	private static fieldButtons[][] screenShot;
 	
-	private static int gameSpeed = 1;							//velocitÔøΩ di gioco
+	private static int gameSpeed = 1;							//velocità di gioco
 	
 	private static boolean startTheGame = false;				//quando vale true il gioco parte
 	
@@ -63,6 +67,10 @@ public class Field extends JFrame{
 	
 	private Widget menu;
 	
+	private boolean alreadyChecked = false;
+	
+	public static DrawFigure drawer;
+	
 	public Field(){
 		super("The Game Of Life");
 		
@@ -88,11 +96,11 @@ public class Field extends JFrame{
 		//creo il widget che mi permette di far partire il gioco;
 		menu = new Widget();
 		
-		select = new SelectionWindow(sizeSelected[0]);
+		select = new SelectionWindow();
+		
+		drawer = new DrawFigure();
 		
 		this.setVisible(true);
-		
-		new SelectionWindow().setVisible(true);
 		
 		//inizio il gioco
 		start(buttons);
@@ -106,33 +114,6 @@ public class Field extends JFrame{
 		int num = buttons.length/5;
 		do{
 			while(!startTheGame){
-				while(select.SetFigure){
-					for(fieldButtons[] butt : buttons){
-						for(fieldButtons b : butt){
-							b.userHasToDraw(true);
-						}
-					}
-					for(fieldButtons[] butt : buttons){
-						for(fieldButtons b : butt){
-							if(b.Checked()){
-								select.putFigure(b.getRow(),b.getColumn(),buttons);
-								sleepFor(10); //lasciagli il tempo di lavorare
-								done = true;
-								select.SetFigure = false;
-							}
-						}
-					}
-					for(i = 0; i < buttons.length; i++){
-						for(j = 0; j < buttons[0].length; j++){
-							if(select.buttons[i][j].isBlack()){
-								buttons[i][j].changeToBlack();
-							}else{
-								buttons[i][j].changeToWhite();
-							}
-							buttons[i][j].userHasToDraw(false);
-						}
-					}
-				}
 				sleepFor(5);
 			}
 			setButtons();
@@ -273,7 +254,7 @@ public class Field extends JFrame{
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
 		int yLocation = ((int)screen.getHeight()/2) - (y/2);
 		this.setSize(xSize, ySize);
-		this.setResizable(false);							//non ÔøΩ modificabile
+		this.setResizable(false);							//non è modificabile
 		setLocation(xLocation,yLocation);
 		
 	}
@@ -309,7 +290,7 @@ public class Field extends JFrame{
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 			//lo sposto al centro dello schermo
-			int xLocation = ((int)screen.getWidth()/2) - 100; //valori pressochÔøΩ casuali, da testare su computer diversi
+			int xLocation = ((int)screen.getWidth()/2) - 100; //valori pressochè casuali, da testare su computer diversi
 			int yLocation = ((int)screen.getHeight()/2) - 100;
 			setLocation(xLocation,yLocation);
 			
@@ -334,8 +315,8 @@ public class Field extends JFrame{
 			setResizable(false);
 			pack();
 			this.setVisible(true);
-			while(!sizeSelect){//finchÔøΩ non premo il bottone
-				if(radioButtonClicked){//se un radioButton ÔøΩ stato spuntato
+			while(!sizeSelect){//finchè non premo il bottone
+				if(radioButtonClicked){//se un radioButton è stato spuntato
 					if(r1.isSelected() ){
 						r1.setSelected(true);
 						r2.setSelected(false);
@@ -420,14 +401,14 @@ public class Field extends JFrame{
 		}
 	}
 	/*
-	 * La classe Widget permette di creare un frame che permette la gestione della velocitÔøΩ di gioco
+	 * La classe Widget permette di creare un frame che permette la gestione della velocità di gioco
 	 * la sua messa in pausa e la partenza del gioco stesso
 	 * */
 	private class Widget extends JFrame{
 		private Widget(){
 			super("Strumenti di gioco");
 			
-			int xLocation = 0;//in questo modo si troverÔøΩ sempre a fianco del frame
+			int xLocation = 0;//in questo modo si troverà sempre a fianco del frame
 			
 			if(sizeSelected[0] == 250){
 				xLocation = ((int)screen.getWidth()/2) - 500;
@@ -446,7 +427,7 @@ public class Field extends JFrame{
 			this.setLocation(xLocation,200);
 			
 			//aggiungo label e scrollbar
-			JLabel l1 = new JLabel("Imposta la velocitÔøΩ");
+			JLabel l1 = new JLabel("Imposta la velocità");
 			l1.setForeground(Color.white);
 			Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 			labelTable.put(new Integer(1), new JLabel("1"));
@@ -461,7 +442,7 @@ public class Field extends JFrame{
 			labelTable.put(new Integer(10), new JLabel("10"));
 			l1.setBounds(70,50, 200, 25);
 
-			final JLabel selected = new JLabel("VelocitÔøΩ selezionata: 1");
+			final JLabel selected = new JLabel("Velocità selezionata: 1");
 			selected.setBounds(60,120,200,20);
 			selected.setForeground(Color.white);
 			
@@ -477,7 +458,7 @@ public class Field extends JFrame{
 			      public void stateChanged(ChangeEvent e) {
 			    	  JSlider source = (JSlider)e.getSource();
 			    	  gameSpeed = source.getValue();
-			    	  selected.setText("VelocitÔøΩ selezionata: "+ gameSpeed);
+			    	  selected.setText("Velocità selezionata: "+ gameSpeed);
 			      }
 			    });
 			
@@ -556,7 +537,7 @@ public class Field extends JFrame{
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					startTheGame = true;
-					if(firstTime){			//se ÔøΩ la prima volta che lo premo
+					if(firstTime){			//se è la prima volta che lo premo
 						setButtons();
 						firstTime=false;
 					}

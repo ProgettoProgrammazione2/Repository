@@ -10,153 +10,81 @@ public class DrawFigure extends JButton {
 	public static int size = Field.buttons.length;
 	public static fieldButtons[][] button;
 	
-	public static void putFigure(ActionEvent evento) {
-		
-		
-		System.out.println("Sono arrivato in Draw");
-		
-		for(int i = 0; i < size; i++)
-			for(int j = 0; j < size; j++){
-				if(Field.buttons[i][j].isBlack())
-					Field.nextGen[i][j].setBackground(Color.black);
-				else
-					Field.nextGen[i][j].setBackground(Color.white);
-			}
-		System.out.println("Ma allora funziona");
+	public static void putFigure(ActionEvent evento){
 		
 		for(int Row = 0; Row < size; Row++)
 			for(int Column = 0; Column < size; Column++)
 				if(evento.getSource() == Field.buttons[Column][Row]){
 					//System.out.println("Ho trovato il pulsante");
+					for(int i = 0; i < size; i++)
+						for(int j = 0; j < size; j++){
+							if(Field.buttons[i][j].isBlack())
+								Field.nextGen[i][j].setBackground(Color.black);
+							else
+								Field.nextGen[i][j].setBackground(Color.white);
+						}
 					switch(SelectionWindow.WhichFigure) {
 			
 			
 		
 						case 1:{//posiziono la figura 1	
-							/*if(size - Column < 2 && size - Row < 2){
-								System.out.println("Non si ferma");
-								break;
-								
-							}
-							else{*/
-							System.out.println("Sono entrato in figura 1");
-							Field.buttons[Column + 1][Row].setBackground(Color.black);	//costruisco la figura dal bottone di partenza
-							Field.buttons[Column][Row].setBackground(Color.black);
-							Field.buttons[Column - 1][Row].setBackground(Color.black);
-							
-							//SelectionWindow.SetFigure = false;	
-							System.out.println("Ho finito figura 1");//setto la variabile SetFigure a false per indicare che ho inserito la figura
-							
+							try{
+								Field.buttons[Column + 1][Row].setBackground(Color.black);	//costruisco la figura dal bottone di partenza
+								Field.buttons[Column][Row].setBackground(Color.black);
+								Field.buttons[Column - 1][Row].setBackground(Color.black);
+							}catch(ArrayIndexOutOfBoundsException e){}
+						
 						};break;
 					
 						case 2:{
-							Field.buttons[Column + 1][Row].setBackground(Color.black);		//costruisco la figura dal bottone di partenza
-							Field.buttons[Column][Row].setBackground(Color.black);
-							Field.buttons[Column][Row + 1].setBackground(Color.black);
-							Field.buttons[Column][Row + 2].setBackground(Color.black);
-							Field.buttons[Column + 1][Row + 1].setBackground(Color.black);
-							Field.buttons[Column + 1][Row - 1].setBackground(Color.black);
-							//SeletionWindow.ChangeIcon(2);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							try{
+								Field.buttons[Column + 1][Row].setBackground(Color.black);		//costruisco la figura dal bottone di partenza
+								Field.buttons[Column][Row].setBackground(Color.black);
+								Field.buttons[Column][Row + 1].setBackground(Color.black);
+								Field.buttons[Column][Row + 2].setBackground(Color.black);
+								Field.buttons[Column + 1][Row + 1].setBackground(Color.black);
+								Field.buttons[Column + 1][Row - 1].setBackground(Color.black);
+							}catch(ArrayIndexOutOfBoundsException e){}
 					
 						};break;
 			
 		
 		
 						case 3: {
+							try{
 							Field.buttons[Column -1][Row].setBackground(Color.black);		//costruisco la figura dal bottone di partenza
 							Field.buttons[Column - 1][Row - 1].setBackground(Color.black);
 							Field.buttons[Column][Row - 1].setBackground(Color.black);
 							Field.buttons[Column + 2][Row + 2].setBackground(Color.black);
 							Field.buttons[Column + 1][Row + 2].setBackground(Color.black);
 							Field.buttons[Column + 2][Row + 1].setBackground(Color.black);
-							//SelectionWindow.bottone3.setBackground(Color.white);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;
 			
 		
 		
 						case 4: {
-							Field.buttons[Column+1][Row-3].setBackground(Color.black);
-							Field.buttons[Column+1][Row-2].setBackground(Color.black);
-							Field.buttons[Column+1][Row+2].setBackground(Color.black);
-							Field.buttons[Column+1][Row+3].setBackground(Color.black);
-							Field.buttons[Column+2][Row-5].setBackground(Color.black);
-							Field.buttons[Column+2][Row-3].setBackground(Color.black);
-							Field.buttons[Column+2][Row-1].setBackground(Color.black);
-							Field.buttons[Column+2][Row+1].setBackground(Color.black);
-							Field.buttons[Column+2][Row+3].setBackground(Color.black);
-							Field.buttons[Column+2][Row+5].setBackground(Color.black);
-							Field.buttons[Column+3][Row-1].setBackground(Color.black);
-							Field.buttons[Column+3][Row-2].setBackground(Color.black);
-							Field.buttons[Column+3][Row-5].setBackground(Color.black);
-							Field.buttons[Column+3][Row-6].setBackground(Color.black);
-							Field.buttons[Column+3][Row-7].setBackground(Color.black);
-							Field.buttons[Column+3][Row+1].setBackground(Color.black);
-							Field.buttons[Column+3][Row+2].setBackground(Color.black);
-							Field.buttons[Column+3][Row+5].setBackground(Color.black);
-							Field.buttons[Column+3][Row+6].setBackground(Color.black);
-							Field.buttons[Column+3][Row+7].setBackground(Color.black);
-							Field.buttons[Column+5][Row-2].setBackground(Color.black);
-							Field.buttons[Column+5][Row-3].setBackground(Color.black);
-							Field.buttons[Column+5][Row+2].setBackground(Color.black);
-							Field.buttons[Column+5][Row+3].setBackground(Color.black);
-							Field.buttons[Column+6][Row-3].setBackground(Color.black);
-							Field.buttons[Column+6][Row+3].setBackground(Color.black);
-							Field.buttons[Column+7][Row-3].setBackground(Color.black);
-							Field.buttons[Column+7][Row+3].setBackground(Color.black);
-							
-							Field.buttons[Column-1][Row-3].setBackground(Color.black);
-							Field.buttons[Column-1][Row-2].setBackground(Color.black);
-							Field.buttons[Column-1][Row+2].setBackground(Color.black);
-							Field.buttons[Column-1][Row+3].setBackground(Color.black);
-							Field.buttons[Column-2][Row-5].setBackground(Color.black);
-							Field.buttons[Column-2][Row-3].setBackground(Color.black);
-							Field.buttons[Column-2][Row-1].setBackground(Color.black);
-							Field.buttons[Column-2][Row+1].setBackground(Color.black);
-							Field.buttons[Column-2][Row+3].setBackground(Color.black);
-							Field.buttons[Column-2][Row+5].setBackground(Color.black);
-							Field.buttons[Column-3][Row-1].setBackground(Color.black);
-							Field.buttons[Column-3][Row-2].setBackground(Color.black);
-							Field.buttons[Column-3][Row-5].setBackground(Color.black);
-							Field.buttons[Column-3][Row-6].setBackground(Color.black);
-							Field.buttons[Column-3][Row-7].setBackground(Color.black);
-							Field.buttons[Column-3][Row+1].setBackground(Color.black);
-							Field.buttons[Column-3][Row+2].setBackground(Color.black);
-							Field.buttons[Column-3][Row+5].setBackground(Color.black);
-							Field.buttons[Column-3][Row+6].setBackground(Color.black);
-							Field.buttons[Column-3][Row+7].setBackground(Color.black);
-							Field.buttons[Column-5][Row-2].setBackground(Color.black);
-							Field.buttons[Column-5][Row-3].setBackground(Color.black);
-							Field.buttons[Column-5][Row+2].setBackground(Color.black);
-							Field.buttons[Column-5][Row+3].setBackground(Color.black);
-							Field.buttons[Column-6][Row-3].setBackground(Color.black);
-							Field.buttons[Column-6][Row+3].setBackground(Color.black);
-							Field.buttons[Column-7][Row-3].setBackground(Color.black);
-							Field.buttons[Column-7][Row+3].setBackground(Color.black);
-							
-							
-							
-							
-							//ChangeIcon(4);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							try{
+								creaFigura(Column,Row);
+							}catch(Exception OutOfBorde){}
 						};break;
 			
 		
 		
 						case 5: {
+							try{
 							Field.buttons[Column-1][Row].setBackground(Color.black);
 							Field.buttons[Column][Row+1].setBackground(Color.black);
 							Field.buttons[Column+1][Row-1].setBackground(Color.black);
 							Field.buttons[Column+1][Row].setBackground(Color.black);
 							Field.buttons[Column+1][Row+1].setBackground(Color.black);
-							//SelectionWindow.ChangeIcon(5);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;
 			
 		
 		
 						case 6: {
+							try{
 							Field.buttons[Column-1][Row-2].setBackground(Color.black);
 							Field.buttons[Column-1][Row+1].setBackground(Color.black);
 							Field.buttons[Column][Row+2].setBackground(Color.black);
@@ -166,13 +94,13 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column+2][Row].setBackground(Color.black);
 							Field.buttons[Column+2][Row+1].setBackground(Color.black);
 							Field.buttons[Column+2][Row+2].setBackground(Color.black);						
-							//ChangeIcon(5);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;
 			
 		
 		
 						case 7: {
+							try{
 							Field.buttons[Column][Row+1].setBackground(Color.black);							
 							Field.buttons[Column][Row-3].setBackground(Color.black);
 							Field.buttons[Column][Row-2].setBackground(Color.black);
@@ -189,24 +117,24 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column+2][Row+1].setBackground(Color.black);
 							Field.buttons[Column-3][Row].setBackground(Color.black);
 							Field.buttons[Column+3][Row].setBackground(Color.black);
-							//ChangeIcon(7);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;
 			
 		
 		
 						case 8: {
+							try{
 							Field.buttons[Column][Row].setBackground(Color.black);
 							Field.buttons[Column+1][Row].setBackground(Color.black);
 							Field.buttons[Column][Row+1].setBackground(Color.black);
 							Field.buttons[Column+1][Row+1].setBackground(Color.black);
-							//ChangeIcon(8);
-							//SelectionWindow.SetFigure = false;							//setto la variabile SetFigure a false per indicare che ho inserito la figura
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;
 			
 		
 		
 						case 9: {
+							try{
 							Field.buttons[Column][Row-1].setBackground(Color.black);							
 							Field.buttons[Column][Row+3].setBackground(Color.black);
 							Field.buttons[Column][Row+2].setBackground(Color.black);
@@ -223,12 +151,69 @@ public class DrawFigure extends JButton {
 							Field.buttons[Column+2][Row-1].setBackground(Color.black);
 							Field.buttons[Column-3][Row].setBackground(Color.black);
 							Field.buttons[Column+3][Row].setBackground(Color.black);
-							//SelectionWindow.SetFigure = false;
+							}catch(ArrayIndexOutOfBoundsException e){}
 						};break;			
 					}
 			}
-		Field.ReadyToDraw = true;
-		
 		}
+	private static void creaFigura(int Column, int Row){
+		Field.buttons[Column+1][Row-3].changeToBlack();
+		Field.buttons[Column+1][Row-2].setBackground(Color.black);
+		Field.buttons[Column+1][Row+2].setBackground(Color.black);
+		Field.buttons[Column+1][Row+3].setBackground(Color.black);
+		Field.buttons[Column+2][Row-5].setBackground(Color.black);
+		Field.buttons[Column+2][Row-3].setBackground(Color.black);
+		Field.buttons[Column+2][Row-1].setBackground(Color.black);
+		Field.buttons[Column+2][Row+1].setBackground(Color.black);
+		Field.buttons[Column+2][Row+3].setBackground(Color.black);
+		Field.buttons[Column+2][Row+5].setBackground(Color.black);
+		Field.buttons[Column+3][Row-1].setBackground(Color.black);
+		Field.buttons[Column+3][Row-2].setBackground(Color.black);
+		Field.buttons[Column+3][Row-5].setBackground(Color.black);
+		Field.buttons[Column+3][Row-6].setBackground(Color.black);
+		Field.buttons[Column+3][Row-7].setBackground(Color.black);
+		Field.buttons[Column+3][Row+1].setBackground(Color.black);
+		Field.buttons[Column+3][Row+2].setBackground(Color.black);
+		Field.buttons[Column+3][Row+5].setBackground(Color.black);
+		Field.buttons[Column+3][Row+6].setBackground(Color.black);
+		Field.buttons[Column+3][Row+7].setBackground(Color.black);
+		Field.buttons[Column+5][Row-2].setBackground(Color.black);
+		Field.buttons[Column+5][Row-3].setBackground(Color.black);
+		Field.buttons[Column+5][Row+2].setBackground(Color.black);
+		Field.buttons[Column+5][Row+3].setBackground(Color.black);
+		Field.buttons[Column+6][Row-3].setBackground(Color.black);
+		Field.buttons[Column+6][Row+3].setBackground(Color.black);
+		Field.buttons[Column+7][Row-3].setBackground(Color.black);
+		Field.buttons[Column+7][Row+3].setBackground(Color.black);
+		
+		Field.buttons[Column-1][Row-3].setBackground(Color.black);
+		Field.buttons[Column-1][Row-2].setBackground(Color.black);
+		Field.buttons[Column-1][Row+2].setBackground(Color.black);
+		Field.buttons[Column-1][Row+3].setBackground(Color.black);
+		Field.buttons[Column-2][Row-5].setBackground(Color.black);
+		Field.buttons[Column-2][Row-3].setBackground(Color.black);
+		Field.buttons[Column-2][Row-1].setBackground(Color.black);
+		Field.buttons[Column-2][Row+1].setBackground(Color.black);
+		Field.buttons[Column-2][Row+3].setBackground(Color.black);
+		Field.buttons[Column-2][Row+5].setBackground(Color.black);
+		Field.buttons[Column-3][Row-1].setBackground(Color.black);
+		Field.buttons[Column-3][Row-2].setBackground(Color.black);
+		Field.buttons[Column-3][Row-5].setBackground(Color.black);
+		Field.buttons[Column-3][Row-6].setBackground(Color.black);
+		Field.buttons[Column-3][Row-7].setBackground(Color.black);
+		Field.buttons[Column-3][Row+1].setBackground(Color.black);
+		Field.buttons[Column-3][Row+2].setBackground(Color.black);
+		Field.buttons[Column-3][Row+5].setBackground(Color.black);
+		Field.buttons[Column-3][Row+6].setBackground(Color.black);
+		Field.buttons[Column-3][Row+7].setBackground(Color.black);
+		Field.buttons[Column-5][Row-2].setBackground(Color.black);
+		Field.buttons[Column-5][Row-3].setBackground(Color.black);
+		Field.buttons[Column-5][Row+2].setBackground(Color.black);
+		Field.buttons[Column-5][Row+3].setBackground(Color.black);
+		Field.buttons[Column-6][Row-3].setBackground(Color.black);
+		Field.buttons[Column-6][Row+3].setBackground(Color.black);
+		Field.buttons[Column-7][Row-3].setBackground(Color.black);
+		Field.buttons[Column-7][Row+3].setBackground(Color.black);
+	}
 	}
 	
