@@ -29,9 +29,15 @@ public class fieldButtons extends JButton{
 					if(getColor() == Color.white && !gameOn){
 						changeToBlack(); //se sono ancora in fase pre gioco lo creo
 						setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " alive");
+					}else if(getColor() == Color.black && !gameOn){
+						changeToWhite(); 
+						setToolTipText("xPos : " + (riga+1) + " yPos : "+ (colonna + 1) + " died");
 					}else if(getColor() == Color.black && gameOn){ 
 						changeToWhite(); //lo uccido se sono in gioco
 						setToolTipText("xPos : " + (riga + 1) + " yPos : "+ (colonna + 1) + " died");
+					}else if(getColor() == Color.white && gameOn){ 
+						changeToBlack(); //lo uccido se sono in gioco
+						setToolTipText("xPos : " + (riga + 1) + " yPos : "+ (colonna + 1) + " alive");
 					}else{
 						//nothing to do
 					}
