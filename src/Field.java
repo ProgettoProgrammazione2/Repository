@@ -18,30 +18,42 @@ import javax.swing.JSlider;
 //import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+/**
+ * 
+ * 
+ * @author Nicola "Field" Castellani
+ * @author Pietro "Drawer" Musoni
+ *
+ *<p>
+ * La classe Field è il corpo del nostro programma, gestisce diversi elementi tra cui
+ * l'oggetto widget, che permette di scegliere tra diverse opzioni run-time e non, e il
+ * selettore delle figure, il quale permette di inserire varie figure pre impostate.
+ * <p>
+ * In sostanza la classe Field corrisponde al campo di gioco e da essa parte l'esecuzione
+ * del programma.
+ * <p>
+ */
 public class Field extends JFrame{
 
-	private static int sizeSelected[] = new int[2];			//le dimensioni selezionate dall'utente
+	private static int sizeSelected[] = new int[2];	
 	
-	private static boolean sizeSelect = false;					//vale true se l'utente ha selezionato la dimensione del frame
+	private static boolean endSelect = false;
 	
-	private static boolean endSelect = false;					//vale true se ho effettivamente settato la dimensione del frame
+	private static boolean radioButtonClicked = false;
 	
-	private static boolean radioButtonClicked = false;			//vale true se un radio button ¬è stato selezionato
-	
-	private static Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();	//variabile che assume i valori dello schermo
+	private static Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	private Container contentPane = getContentPane();
 	
-	static fieldButtons[][] buttons;							//i bottoni sul campo
+	public static fieldButtons[][] buttons;
 
 	static fieldButtons[][] nextGen;
 
 	private static fieldButtons[][] screenShot;
 	
-	private static int gameSpeed = 1;							//velocit¬à di gioco
+	private static int gameSpeed = 1;
 	
-	private static boolean startTheGame = false;				//quando vale true il gioco parte
+	private static boolean startTheGame = false;
 	
 	private static boolean firstTime = true;
 	
@@ -54,9 +66,7 @@ public class Field extends JFrame{
 	private static boolean screenShotSelected = false;
 	
 	private boolean pause = false;
-	
-	//private boolean done = false;
-	
+
 	private boolean isEmpty = false;
 	
 	private boolean clear = false;
@@ -67,37 +77,30 @@ public class Field extends JFrame{
 	
 	private Widget menu;
 	
-	//private boolean alreadyChecked = false;
-	
 	public static DrawFigure drawer;
 	
+	/**
+	 * Costruttore della classe Field
+	 */
 	public Field(){
 		super("The Game Of Life");
 		
-		//Loader load = new Loader();
-		
-		//definisco come si deve comportare il frame se esco
 		actionOnExit();	
 		
 		this.getContentPane().setBackground(Color.BLACK);
 		
-		//container
 		contentPane.setLayout(null);
 		
 		getContentPane().setLayout(null);
 		
-		//faccio definire all'utente le dimensioni iniziali
 		startingOptions start = new startingOptions();
 		
-		//aspetto che l'utente finisca
 		while(!endSelect);
 		
 		setDimension(sizeSelected[0],sizeSelected[1]);
 		
-		//creo i bottoni e li inserisco nel frame
 		createButtons(sizeSelected[0],sizeSelected[1]);
 		
-		//creo il widget che mi permette di far partire il gioco;
 		menu = new Widget();
 		
 		select = new SelectionWindow(sizeSelected[0],sizeSelected[0]);
@@ -106,11 +109,15 @@ public class Field extends JFrame{
 		
 		this.setVisible(true);
 		
-		//inizio il gioco
 		start(buttons);
 		
 		
 	}
+	
+	/**
+	 * Il metodo start fa iniziare il gioco dopo che l'utente ha premuto start
+	 * @param buttons la matrice di gioco principale
+	 */
 	private void start(fieldButtons[][] buttons){
 		Controllers[] c = new Controllers[5];
 		
@@ -170,7 +177,6 @@ public class Field extends JFrame{
 			
 			setButtons();
 			
-			//ipotizzo che questa sia l'ultima
 			isEmpty = true;
 			
 			while(pause){
@@ -178,9 +184,6 @@ public class Field extends JFrame{
 				sleepFor(100);
 			
 			}
-			
-			
-			//azzero la nextGen
 			
 			for(fieldButtons[] b : nextGen){
 			
@@ -342,8 +345,12 @@ public class Field extends JFrame{
 			}
 		
 		}while(true);
-												//devo far capire ai bottoni che sono in gioco
+
 	}
+/**
+ * Il metodo setButtons() fa capire ai bottoni che sono in gioco, in questo modo se vengono cliccati
+ * sanno che vengono uccisi
+ */
 	
 	private void setButtons(){
 		
@@ -358,7 +365,10 @@ public class Field extends JFrame{
 		}
 	
 	}
-	
+/**
+ * Il metodo sleepFor mette in attesa la thread che lo chiama
+ * <p>
+ */
 	public void sleepFor(int milliseconds) {
 		
 		try {
@@ -370,7 +380,14 @@ public class Field extends JFrame{
 		}
 	
 	}
-	
+/**
+ * Il metodo createButtons inizializza le matrici utili per il gioco e posiziona le principali
+ * nel campo di gioco.
+ * <p>
+ * 
+ * @param x il numero di bottoni sull'ascissa
+ * @param y il numero di bottoni sull'ordinata
+ */
 	private void createButtons(int x, int y){
 	
 		int xButtons = (int)x/10;							//numero di bottoni orrizzontali
@@ -381,6 +398,7 @@ public class Field extends JFrame{
 		
 		int j=0;
 		
+		
 		buttons = new fieldButtons[xButtons][yButtons];
 		
 		nextGen = new fieldButtons[xButtons][yButtons];
@@ -390,7 +408,7 @@ public class Field extends JFrame{
 		for(i = 0; i < xButtons; i++){
 		
 			for(j = 0; j < yButtons; j++){
-			
+				
 				buttons[i][j] = new fieldButtons();
 				
 				nextGen[i][j] = new fieldButtons();
@@ -407,23 +425,30 @@ public class Field extends JFrame{
 	
 	}
 	
+	/**
+	 * Il metodo actionOnExit definisce il comportamento del frame alla pressione del tasto di chiusura
+	 */
+	
 	private void actionOnExit(){
 	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 	}
 	
+	/**
+	 * Il metodo setDimension,dati 2 parametri in ingresso, stabilisce la grandezza del frame
+	 * e la sua locazione sullo schermo
+	 * <p>
+	 * @param x la dimensione orrizzontale
+	 * @param y la dimensione verticale
+	 */
 	private void setDimension(int x, int y){
-	
-		int xSize = x;
-		
-		int ySize = y+22;
 		
 		int xLocation = ((int)screen.getWidth()/2) - (x/2);	//coordinate per spostare le finestre al centro dello schermo
 		
 		int yLocation = ((int)screen.getHeight()/2) - (y/2);
 		
-		this.setSize(xSize, ySize);
+		this.setSize(x, y + 22);
 		
 		this.setResizable(false);							//non ¬è modificabile
 		
@@ -431,26 +456,36 @@ public class Field extends JFrame{
 		
 	}
 	
-	/*
-	 * 
-	 * 
-	 * Questa classe permette di definire la grandezza iniziale del form
-	 * 
-	 * */
-	
+/**
+ * @author Nicola Castellani
+ * @author Pietro Musoni
+ * 
+ * Questa classe permette di scegliere la dimensione del campo di gioco tra 3 dimensioni possibili:
+ * <p>
+ * 250x250
+ * <p>
+ * 500x500
+ * <p>
+ * 750x750
+ *
+ *@param xLocation locazione sulla ascissa dello schermo
+ *@param yLocation locazione dull'ordinata dello schermo
+ */
 	private class startingOptions extends JFrame{
-		
+		/**
+		 * Costruttore della classe startingOptions
+		 */
 		private startingOptions(){
 			
 			super("The Game Of Life");
 			
+			int xLocation = ((int)screen.getWidth()/2) - 100; 
+			
+			int yLocation = ((int)screen.getHeight()/2) - 100;
+			
 			this.getContentPane().setBackground(Color.BLACK);
 			
-			//bottone
-			
 			JButton bottoneOK = new JButton("OK");
-			
-			//creo i 3 JRADIOBUTTON
 			
 			JRadioButton r1 = new JRadioButton("250x250");
 			
@@ -470,8 +505,6 @@ public class Field extends JFrame{
 			
 			r3.setBackground(Color.black);
 			
-			//creo e aggiungo il listener dei radiobutton
-			
 			ActionListener listener = new JRadioButtonListener();
 			
 			r1.addActionListener(listener);
@@ -480,20 +513,11 @@ public class Field extends JFrame{
 			
 			r2.addActionListener(listener);
 			
-			//imposto la grandezza del frame
 			setBounds(100,200,400,400);
 			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			//lo sposto al centro dello schermo
-			
-			int xLocation = ((int)screen.getWidth()/2) - 100; //valori pressoch¬è casuali, da testare su computer diversi
-			
-			int yLocation = ((int)screen.getHeight()/2) - 100;
-			
 			setLocation(xLocation,yLocation);
-			
-			//aggiungo gli elementi al container
 			
 			Container contentPane = getContentPane();
 			
@@ -519,7 +543,7 @@ public class Field extends JFrame{
 			
 				public void actionPerformed(ActionEvent arg0) {
 				
-					sizeSelect = true;
+					endSelect = true;
 				}
 				
 			});
@@ -530,9 +554,9 @@ public class Field extends JFrame{
 			
 			this.setVisible(true);
 			
-			while(!sizeSelect){//finch¬è non premo il bottone
+			while(!endSelect){//finchè non premo il bottone
 			
-				if(radioButtonClicked){//se un radioButton ¬è stato spuntato
+				if(radioButtonClicked){//se un radioButton è stato spuntato
 				
 					if(r1.isSelected() ){
 					
@@ -579,7 +603,7 @@ public class Field extends JFrame{
 				}
 			
 			};
-			//250x250
+
 			if(r1.isSelected() ){
 			
 				sizeSelected[0]=250;
@@ -610,16 +634,31 @@ public class Field extends JFrame{
 			
 			endSelect = true;
 			
-			this.dispose();				//libero le risorse che utilizzava
+			this.dispose();	
 		
 		}
 	
 	}
-	
+	/**
+	 * 
+	 * @author Nicola Castellani
+	 * @author Pietro Musoni
+	 * 
+	 * La classe Controllers definisce le thread che lavorano sul campo di gioco. In particolare queste
+	 * thread lavorano su uno spazio limitato del gioco in modo che lavorino in contemporanea e non in maniera concorrente.
+	 * <p>
+	 *
+	 */
 	private class Controllers extends Thread{
 	
 		private int start, end;
-		
+		/**
+		 * Costruttore della classe Controllers, come input riceve la riga iniziale e la riga finale per
+		 * ritagliarsi il suo spazio di lavoro nella matrice principale
+		 * 
+		 * @param start la riga dove inizia a controllare
+		 * @param end la riga dove finisce di controllare
+		 */
 		public Controllers(int start, int end){
 		
 			this.start = start;
@@ -628,6 +667,12 @@ public class Field extends JFrame{
 		
 		}
 		
+		/**
+		 * Il metodo run consiste nella scansione di ogni bottone dello spazio assegnato al controllore.
+		 * <p>
+		 * Una volta controllato il numero di cellule vive attorno a quella che si sta studiando determina
+		 * se quest'ultima dovrà vivere o morire nella prossima generazione
+		 */
 		public void run(){
 		
 			int temp = 0;
@@ -657,7 +702,13 @@ public class Field extends JFrame{
 			}
 		
 		}
-		
+		/**
+		 * Controlla il numero di cellule vive attorno a una cellula scelta dal controllore
+		 * 
+		 * @param xPos posizione x della cellula nella matrice
+		 * @param yPos posizione y della cellula nella matrice
+		 * @return il numero di cellule vive attorno alla cellula studiata
+		 */
 		public int check(int xPos,int yPos){
 		
 			int counter = 0;
@@ -697,10 +748,16 @@ public class Field extends JFrame{
 		}
 	
 	}
-	/*
-	 * La classe Widget permette di creare un frame che permette la gestione della velocit¬à di gioco
-	 * la sua messa in pausa e la partenza del gioco stesso
-	 * */
+	/**
+	 * @author Nicola Castellani
+	 * @author Pietro Musoni
+	 * 
+	 * La classe Widget permette di creare un frame per la gestione della velocità di gioco
+	 * la sua messa in pausa e la partenza del gioco stesso, la cattura di una generazione 
+	 * e il restart del gioco in esecuzione o la pulizia del campo stesso
+	 * 
+	 * @param xLocation
+	 */
 	
 	private class Widget extends JFrame{
 	
@@ -708,7 +765,7 @@ public class Field extends JFrame{
 		
 			super("Strumenti di gioco");
 			
-			int xLocation = 0;//in questo modo si trover¬à sempre a fianco del frame
+			int xLocation = 0;//in questo modo si troverà sempre a fianco del frame
 			
 			if(sizeSelected[0] == 250){
 			
@@ -741,7 +798,7 @@ public class Field extends JFrame{
 			this.setLocation(xLocation,200);
 			
 			//aggiungo label e scrollbar
-			JLabel l1 = new JLabel("Imposta la velocit¬à");
+			JLabel l1 = new JLabel("Imposta la velocita'");
 			
 			l1.setForeground(Color.white);
 			
@@ -769,7 +826,7 @@ public class Field extends JFrame{
 			
 			l1.setBounds(70,50, 200, 25);
 
-			final JLabel selected = new JLabel("Velocit¬à selezionata: 1");
+			final JLabel selected = new JLabel("Velocita' selezionata: 1");
 			
 			selected.setBounds(60,120,200,20);
 			
@@ -799,7 +856,7 @@ public class Field extends JFrame{
 			    	
 					gameSpeed = source.getValue();
 			    	
-					selected.setText("Velocit¬à selezionata: "+ gameSpeed);
+					selected.setText("Velocita' selezionata: "+ gameSpeed);
 			      
 				}
 			    
@@ -942,7 +999,7 @@ public class Field extends JFrame{
 				
 					startTheGame = true;
 					
-					if(firstTime){			//se ¬è la prima volta che lo premo
+					if(firstTime){			//se è la prima volta che lo premo
 					
 						setButtons();
 						
@@ -978,6 +1035,14 @@ public class Field extends JFrame{
 		}
 	
 	}
+/**
+ * 
+ * @author Nicola Castellani
+ * @author Pietro Musoni
+ * 
+ * La classe Loader è un semplice frame che presenta un immagine del gioco prima di farlo partire
+ *
+ */
 	private class Loader extends JFrame{
 	
 		public Loader(){
