@@ -113,9 +113,9 @@ public class Field extends JFrame{
 			}
 			
 			numOfThreads =Integer.parseInt(JOptionPane.showInputDialog("Inserisci il numero di threads \n" +
-					"ATTENZIONE: per un funzionamento corretto dell'applicazione\n" +
-					"è necessario scegliere un numero di thread che non superi\n" +
-					"il rapporto di 1:1 con il numero di righe della matrice"));
+					"ATTENZIONE: il programma gestisce le thread in modo che al massimo\n" +
+					"ogni thread lavori con una riga della matrice, perciò se si supera\n" +
+					"il rapporto di 1:1 le thread che restano senza riga non saranno considerate"));
 			
 		}while(numOfThreads <= 0);
 			
@@ -227,8 +227,9 @@ public class Field extends JFrame{
 			j = 1;
 
 			for(int x = 0; x < c.length; x++){
+				dummy++;
 				//assegno a ogni thread il suo spazio di lavoro
-				if(++dummy == numOfThreads){
+				if(dummy == numOfThreads){
 					//se sono l'ultima thread mi prendo l'ultimo pezzo di matrice
 					c[x] = new Controllers(i*num,buttons.length - 1);
 				}else{
@@ -241,7 +242,9 @@ public class Field extends JFrame{
 				j++;
 
 			}
-
+			
+			dummy = 0;
+			
 			for(Controllers co : c){
 				
 				co.run();
