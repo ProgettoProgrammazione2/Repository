@@ -7,7 +7,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * 
  * @author Nicola "Field" Castellani
  * @author Pietro "Drawer" Musoni
- *
+ *<p>
  * GameOfLife: http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
  * 
  * <p>
@@ -19,20 +19,20 @@ import javax.swing.UnsupportedLookAndFeelException;
  * 
  */
 public class GameOfLife {
-	public static void main() {
-		
-		   try {
-			     
-			     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	public static void main(String[] args) {
+
+		try {
+
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-			
-			  } catch (Exception ex) {
-				  
-			     System.err.println("error loading look and feel - using default.");
-			     
-			  }
-		   
+
+		} catch (Exception ex) {
+
+			System.err.println("error loading look and feel - using default.");
+
+		}
+
 		Field campoDaGioco = new Field();
 
 	}

@@ -2,6 +2,7 @@ package it.univr.GameOfLife;
 
 
 import java.awt.Dimension;
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+
+/**
+ * 
+ * <p>
+ * La classe SelectionWindow, crea la finestra di selezione delle figure predefinite da importare
+ * sulla matrice di gioco. Oltre a creare la finestra gestisce le variabili pubbliche che servono 
+ * al drawer per disegnare la figura correttamente.
+ * @author Nicola "Field" Castellani
+ * @author Pietro "Drawer" Musoni
+ */
 
 public class SelectionWindow extends JFrame {
 	
@@ -23,6 +35,17 @@ public class SelectionWindow extends JFrame {
 	JPanel topPanel;
 	
 	public JButton bottone1, bottone2, bottone3, bottone4, bottone5, bottone6, bottone7, bottone8, bottone9;
+	
+	/**
+	 * Costruttore della classe SelectionWindow
+	 * crea i nove bottoni necessari alla selezione delle nove figure corrispondenti, rappresentate graficamente 
+	 * dalle immagini .gif. Questo metodo gestisce le variabili WhichFigure e SetFigure che serviranno al drawer per  
+	 * determinare le figure da importare nella matrice di gioco Field.
+	 * Dagli action listener dei bottoni vengono gestite le selezioni e le deselezioni delle figure.
+	 * 
+	 * @param xPos	come parametri passo la grandezza della matrice di gioco per poter posizionare la finestra nella sezione dello schermo adeguata
+	 * @param yPos
+	 */
 	
 	public SelectionWindow(int xPos,int yPos) {
 	
@@ -90,14 +113,17 @@ public class SelectionWindow extends JFrame {
 			setLocation((screen.width - frame.width)/2 + xPos -200,(screen.height - frame.height)/2 + 10);
 			
 		}
-																
-		bottone1.addActionListener( new ActionListener() {					//ad ogni bottone si passa una 
+		
+		/*	Viene creato un action listener per ogni bottone della finestra che gestisce la selezione delle 
+		    figure preimpostate  */
+		bottone1.addActionListener( new ActionListener() {					
 			
-			public void actionPerformed(ActionEvent e) {					//variabile per determinare a quale figura si riferisce
-				
-				if (!SetFigure) {												//Se non è selezionato nessun bottone, seleziono
+			public void actionPerformed(ActionEvent e) {					
+			/*  ogni bottone avrà un comportamento diverso in base a se è il primo ad essere selezionato, 
+			 se è già stato selezionato o se viene selezionato in seguito a un altro bottone  */
+				if (!SetFigure) {												
 			
-					bottone1.setIcon(new ImageIcon("images/negative1.gif"));	//questo
+					bottone1.setIcon(new ImageIcon("images/negative1.gif"));	
 					
 					WhichFigure = 1;
 					
@@ -254,110 +280,205 @@ public class SelectionWindow extends JFrame {
 		});
 		
 		bottone6.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				
 				if (!SetFigure) {
+					
 					bottone6.setIcon(new ImageIcon("images/negative6.gif"));
+					
 					WhichFigure = 6;
+					
 					SetFigure = true;
+					
 				}
 				
 				else
+					
 					if (WhichFigure == 6){
+						
 						ChangeIcon(6);
+						
 						SetFigure = false;
+						
 					}
+				
 					else {
+						
 						ChangeIcon(WhichFigure);
+						
 						bottone6.setIcon(new ImageIcon("images/negative6.gif"));
+						
 						WhichFigure = 6;
+						
 					}		
 			}
+			
 		});
 		
 		bottone7.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				
 				if (!SetFigure) {
+					
 					bottone7.setIcon(new ImageIcon("images/negative7.gif"));
+					
 					WhichFigure = 7;
+					
 					SetFigure = true;
+					
 				}
+				
 				else
+					
 					if (WhichFigure == 7){
+						
 						ChangeIcon(7);
+						
 						SetFigure = false;
+						
 					}
+				
 					else {
+						
 						ChangeIcon(WhichFigure);
+						
 						bottone7.setIcon(new ImageIcon("images/negative7.gif"));
+						
 						WhichFigure = 7;
+						
 					}		
+				
 			}
+			
 		});
 		
 		bottone8.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				
 				if (!SetFigure) {
+					
 					bottone8.setIcon(new ImageIcon("images/negative8.gif"));
+					
 					WhichFigure = 8;
+					
 					SetFigure = true;
+					
 				}
+				
 				else
+					
 					if (WhichFigure == 8){
+						
 						ChangeIcon(8);
+						
 						SetFigure = false;
+						
 					}
+				
 					else {
+						
 						ChangeIcon(WhichFigure);
+						
 						bottone8.setIcon(new ImageIcon("images/negative8.gif"));
+						
 						WhichFigure = 8;
-					}		
+						
+					}	
+				
 			}
+			
 		});
 		
 		bottone9.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				
 				if (!SetFigure) {
+					
 					bottone9.setIcon(new ImageIcon("images/negative9.gif"));
+					
 					WhichFigure = 9;
+					
 					SetFigure = true;
+					
 				}
+				
 				else
+					
 					if (WhichFigure == 9){
+						
 						ChangeIcon(9);
+						
 						SetFigure = false;
+						
 					}
+				
 					else {
+						
 						ChangeIcon(WhichFigure);
+						
 						bottone9.setIcon(new ImageIcon("images/negative9.gif"));
+						
 						WhichFigure = 9;
-					}		
+						
+					}
+				
 			}
+			
 		});
 		
-		setVisible(true);		
+		setVisible(true);	
+		
 	}
 	
 	
+	/** Gestisce le icone di ogni bottone nella finestra per rendere visibile all'utente la selezione di una determinata figura
+	 * 
+	 * @param WhichFigure serve a determinare quale pulsante si è premuto
+	 */
 	
-	public void ChangeIcon(int WhichFigure) {								//deseleziona un bottone, passatogli sotto la variabile WhichFigure
+	
+	public void ChangeIcon(int WhichFigure) {								
+		//deseleziona un bottone, passatogli sotto la variabile WhichFigure
 		if (WhichFigure == 1)
+			
 			bottone1.setIcon(new ImageIcon("images/bottone1.gif"));
+		
 		else if(WhichFigure == 2)
+			
 			bottone2.setIcon(new ImageIcon("images/bottone2.gif"));
+		
 		else if(WhichFigure == 3)
+			
 			bottone3.setIcon(new ImageIcon("images/bottone3.gif"));
+		
 		else if(WhichFigure == 4)
+			
 			bottone4.setIcon(new ImageIcon("images/bottone4.gif"));
+		
 		else if(WhichFigure == 5)
+			
 			bottone5.setIcon(new ImageIcon("images/bottone5.gif"));
+		
 		else if(WhichFigure == 6)
+			
 			bottone6.setIcon(new ImageIcon("images/bottone6.gif"));
+		
 		else if(WhichFigure == 7)
+			
 			bottone7.setIcon(new ImageIcon("images/bottone7.gif"));
+		
 		else if(WhichFigure == 8)
+			
 			bottone8.setIcon(new ImageIcon("images/bottone8.gif"));
+		
 		else if(WhichFigure == 9)
+			
 			bottone9.setIcon(new ImageIcon("images/bottone9.gif"));
+		
 		}
 	
 }
