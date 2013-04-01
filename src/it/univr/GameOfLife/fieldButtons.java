@@ -9,8 +9,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 /**
  * 
- * @author Nicola Castellani
- * @author Pietro Musoni
  * <p>
  * La classe fieldButtons definisce l'oggetto bottone che corrisponde a una cellula.
  * <p>
@@ -18,7 +16,8 @@ import javax.swing.JButton;
  * di capire se il giocatore sta giocando e se vuole disegnare.
  * <p>
  * I metodi definiti nella classe permettono di agire sullo stato del bottone
- *
+ * @author Nicola Castellani
+ * @author Pietro Musoni
  */
 public class fieldButtons extends JButton{
 
@@ -101,7 +100,8 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * 
-	 * @return true se il bottone è vivo
+	 * @return true 
+	 * Il metodo ritorna true se e solo se il bottone è vivo
 	 */
 	public boolean isBlack(){
 
@@ -110,7 +110,8 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * 
-	 * @return la riga del bottone selezionato
+	 * @return 
+	 * La riga del bottone selezionato
 	 */
 	public int getRow(){
 
@@ -119,7 +120,8 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * 
-	 * @return la colonna del bottone selezionato
+	 * @return 
+	 * La colonna del bottone selezionato
 	 */	
 	public int getColumn(){
 
@@ -128,7 +130,8 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * Se l'utente decide di disegnare una figura è necessario che il bottone lo venga a sapere
-	 * @param b valore booleano in ingresso, true se l'utente ha intenzione di disegnare
+	 * @param b 
+	 * valore booleano in ingresso, true se l'utente ha intenzione di disegnare
 	 */
 	public void userHasToDraw(boolean b){
 
@@ -148,7 +151,8 @@ public class fieldButtons extends JButton{
 	/**
 	 * Un bottone deve sapere se è in gioco o meno in quanto se viene cliccato mentre è in gioco deve morire, altrimenti
 	 * nasce.
-	 * @param b true se l'utente è in gioco
+	 * @param b 
+	 * true se l'utente è in gioco
 	 */
 	public void isInGame(boolean b){
 
@@ -182,7 +186,8 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * 
-	 * @return il colore del bottone.
+	 * @return 
+	 * Ritorna il colore del bottone, nero = cellula viva;bianco = cellula morta.
 	 */
 	public Color getColor(){
 
@@ -191,8 +196,10 @@ public class fieldButtons extends JButton{
 	}
 	/**
 	 * Posiziona il bottone nella riga e colonna stabilita nella matrice.
-	 * @param riga la riga dove viene posizionato il bottone
-	 * @param colonna la colonna dove viene posizionato il bottone
+	 * @param riga 
+	 * la riga dove viene posizionato il bottone
+	 * @param colonna 
+	 * la colonna dove viene posizionato il bottone
 	 */
 	public final void posizionaIn(int riga, int colonna) {
 

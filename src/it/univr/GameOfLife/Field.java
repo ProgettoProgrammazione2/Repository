@@ -3,20 +3,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 //import javax.swing.UIManager;
@@ -26,8 +22,6 @@ import javax.swing.event.ChangeListener;
 /**
  * 
  * 
- * @author Nicola "Field" Castellani
- * @author Pietro "Drawer" Musoni
  *
  *<p>
  * La classe Field è il corpo del nostro programma, gestisce diversi elementi tra cui
@@ -37,6 +31,8 @@ import javax.swing.event.ChangeListener;
  * In sostanza la classe Field corrisponde al campo di gioco e da essa parte l'esecuzione
  * del programma.
  * <p>
+ * @author Nicola "Field" Castellani
+ * @author Pietro "Drawer" Musoni
  */
 public class Field extends JFrame{
 	//vettore di 2 elementi con la dimensione selezionata dall'utente
@@ -84,6 +80,8 @@ public class Field extends JFrame{
 	private Widget menu;
 	//l'oggetto che si occupa di disegnare le figure selezionate dall'utente
 	public static DrawFigure drawer;
+	//numero di thread, 5 di default
+	private static int numOfThreads = 5;
 
 	/**
 	 * Costruttore della classe Field
@@ -99,13 +97,28 @@ public class Field extends JFrame{
 
 		getContentPane().setLayout(null);
 		//oggetto Loader, schermata iniziale
-		Loader load = new Loader();
+		//Loader load = new Loader();
 		//frame che permette di impostare la dimensione del campo di gioco
 		startingOptions start = new startingOptions();
 		//aspetto che l'utente scelga la dimensione
 		while(!endSelect){
 			sleepFor(100);
 		};
+		//inserisco il numero di threads
+		do{
+			if(numOfThreads <= 0){
+				
+				JOptionPane.showMessageDialog(null, "Non puoi inserire un valore non valido", "Errore", JOptionPane.ERROR_MESSAGE);
+				
+			}
+			
+			numOfThreads =Integer.parseInt(JOptionPane.showInputDialog("Inserisci il numero di threads \n" +
+					"ATTENZIONE: per un funzionamento corretto dell'applicazione\n" +
+					"è necessario scegliere un numero di thread che non superi\n" +
+					"il rapporto di 1:1 con il numero di righe della matrice"));
+			
+		}while(numOfThreads <= 0);
+			
 		//metodo per definire le dimensioni del frame
 		setDimension(sizeSelected[0],sizeSelected[1]);
 		//metodo per creare i bottoni per il gioco
@@ -125,17 +138,20 @@ public class Field extends JFrame{
 
 	/**
 	 * Il metodo start fa iniziare il gioco dopo che l'utente ha premuto start
-	 * @param buttons la matrice di gioco principale
+	 * @param buttons
+	 * la matrice di gioco principale
 	 */
 	private void start(fieldButtons[][] buttons){
 		//thread che lavorano sul campo per il cambio di generazioni
-		Controllers[] c = new Controllers[5];
+		Controllers[] c = new Controllers[numOfThreads];
 
+		int dummy = 0;
+		
 		int i = 0;
 
 		int j = 1;
 
-		int num = buttons.length/5;
+		int num = buttons.length/numOfThreads;
 
 		do{
 			//questa è la fase prima del gioco, durante questa fase vengono controllate diverse
@@ -212,7 +228,13 @@ public class Field extends JFrame{
 
 			for(int x = 0; x < c.length; x++){
 				//assegno a ogni thread il suo spazio di lavoro
-				c[x] = new Controllers(i*num,(j*num) - 1);
+				if(++dummy == numOfThreads){
+					//se sono l'ultima thread mi prendo l'ultimo pezzo di matrice
+					c[x] = new Controllers(i*num,buttons.length - 1);
+				}else{
+					//altrimenti mi prendo il mio pezzo in proporzione al numero di thread
+					c[x] = new Controllers(i*num,(j*num) - 1);
+				}
 
 				i++;
 
@@ -465,8 +487,6 @@ public class Field extends JFrame{
 	}
 
 	/**
-	 * @author Nicola Castellani
-	 * @author Pietro Musoni
 	 * <p>
 	 * Questa classe permette di scegliere la dimensione del campo di gioco tra 3 dimensioni possibili:
 	 * <p>
@@ -475,9 +495,12 @@ public class Field extends JFrame{
 	 * 500x500
 	 * <p>
 	 * 750x750
-	 *
-	 *@param xLocation locazione sulla ascissa dello schermo
-	 *@param yLocation locazione dull'ordinata dello schermo
+	 *@author Nicola Castellani
+	 *@author Pietro Musoni
+	 *@param xLocation 
+	 *locazione sulla ascissa dello schermo
+	 *@param yLocation 
+	 *locazione dull'ordinata dello schermo
 	 */
 	private class startingOptions extends JFrame{
 		/**
@@ -491,27 +514,13 @@ public class Field extends JFrame{
 
 			int yLocation = ((int)screen.getHeight()/2) - 100;
 
-			this.getContentPane().setBackground(Color.BLACK);
-
 			JButton bottoneOK = new JButton("OK");
 
 			JRadioButton r1 = new JRadioButton("250x250");
 
-			r1.setForeground(Color.white);
-
-			r1.setBackground(Color.black);
-
 			JRadioButton r2 = new JRadioButton("500x500");
 
-			r2.setForeground(Color.white);
-
-			r2.setBackground(Color.black);
-
 			JRadioButton r3 = new JRadioButton("750x750");
-
-			r3.setForeground(Color.white);
-
-			r3.setBackground(Color.black);
 
 			ActionListener listener = new JRadioButtonListener();
 
@@ -533,7 +542,7 @@ public class Field extends JFrame{
 
 			JLabel intro = new JLabel("SELEZIONA UNA DIMENSIONE");
 
-			intro.setForeground(Color.white);
+			intro.setForeground(Color.black);
 
 			contentPane.add(intro, BorderLayout.NORTH);
 
@@ -637,13 +646,12 @@ public class Field extends JFrame{
 	}
 	/**
 	 * 
-	 * @author Nicola Castellani
-	 * @author Pietro Musoni
 	 * <p>
 	 * La classe Controllers definisce le thread che lavorano sul campo di gioco. In particolare queste
 	 * thread lavorano su uno spazio limitato del gioco in modo che lavorino in contemporanea e non in maniera concorrente.
 	 * <p>
-	 *
+	 * @author Nicola Castellani
+	 * @author Pietro Musoni
 	 */
 	private class Controllers extends Thread{
 
@@ -652,8 +660,10 @@ public class Field extends JFrame{
 		 * Costruttore della classe Controllers, come input riceve la riga iniziale e la riga finale per
 		 * ritagliarsi il suo spazio di lavoro nella matrice principale
 		 * 
-		 * @param start la riga dove inizia a controllare
-		 * @param end la riga dove finisce di controllare
+		 * @param start 
+		 * la riga dove inizia a controllare
+		 * @param end 
+		 * la riga dove finisce di controllare
 		 */
 		public Controllers(int start, int end){
 
@@ -709,9 +719,12 @@ public class Field extends JFrame{
 		/**
 		 * Controlla il numero di cellule vive attorno a una cellula scelta dal controllore
 		 * 
-		 * @param xPos posizione x della cellula nella matrice
-		 * @param yPos posizione y della cellula nella matrice
-		 * @return il numero di cellule vive attorno alla cellula studiata
+		 * @param xPos 
+		 * posizione x della cellula nella matrice
+		 * @param 
+		 * yPos posizione y della cellula nella matrice
+		 * @return 
+		 * il numero di cellule vive attorno alla cellula studiata
 		 */
 		public int check(int xPos,int yPos){
 
@@ -753,13 +766,12 @@ public class Field extends JFrame{
 
 	}
 	/**
-	 * @author Nicola Castellani
-	 * @author Pietro Musoni
 	 * <p>
 	 * La classe Widget permette di creare un frame per la gestione della velocità di gioco
 	 * la sua messa in pausa e la partenza del gioco stesso, la cattura di una generazione 
 	 * e il restart del gioco in esecuzione o la pulizia del campo stesso
-	 * 
+	 * @author Nicola Castellani
+	 * @author Pietro Musoni
 	 * @param xLocation
 	 */
 
@@ -791,8 +803,6 @@ public class Field extends JFrame{
 
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-			this.getContentPane().setBackground(Color.black);
-
 			//posiziono la finestra
 
 			this.setSize(250,500);
@@ -803,8 +813,6 @@ public class Field extends JFrame{
 
 			//aggiungo label e scrollbar
 			JLabel l1 = new JLabel("Imposta la velocita'");
-
-			l1.setForeground(Color.white);
 
 			Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 
@@ -834,11 +842,7 @@ public class Field extends JFrame{
 
 			selected.setBounds(60,120,200,20);
 
-			selected.setForeground(Color.white);
-
 			JSlider slider = new JSlider(JSlider.HORIZONTAL,1,10,1);
-
-			slider.setBackground(Color.black);
 
 			slider.setBounds(30, 70, 200, 40);
 
@@ -869,8 +873,6 @@ public class Field extends JFrame{
 			generations = new JLabel("GENERAZIONE # ");
 
 			generations.setBounds(70,150,200,20);
-
-			generations.setForeground(Color.white);
 
 			final JButton screenshoot = new JButton("TAKE A SCREENSHOOT");
 
@@ -1040,12 +1042,11 @@ public class Field extends JFrame{
 
 	}
 	/**
+	 * <p>
+	 * La classe Loader è un semplice frame che presenta un immagine del gioco prima di farlo partire
 	 * 
 	 * @author Nicola Castellani
 	 * @author Pietro Musoni
-	 * <p>
-	 * La classe Loader è un semplice frame che presenta un immagine del gioco prima di farlo partire
-	 *
 	 */
 	private class Loader extends JFrame{
 

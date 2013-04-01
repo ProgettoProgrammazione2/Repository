@@ -5,8 +5,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * 
- * @author Nicola "Field" Castellani
- * @author Pietro "Drawer" Musoni
  *<p>
  * GameOfLife: http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
  * 
@@ -16,7 +14,8 @@ import javax.swing.UnsupportedLookAndFeelException;
  * imposta l'interfaccia JAVA di default.
  * <p>
  * Una volta fatto questo genera una nuova istanza di Field, corpo del gioco.
- * 
+ * @author Nicola "Field" Castellani
+ * @author Pietro "Drawer" Musoni
  */
 public class GameOfLife {
 	public static void main(String[] args) {
