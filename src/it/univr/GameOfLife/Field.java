@@ -97,7 +97,7 @@ public class Field extends JFrame{
 
 		getContentPane().setLayout(null);
 		//oggetto Loader, schermata iniziale
-		//Loader load = new Loader();
+		Loader load = new Loader();
 		//frame che permette di impostare la dimensione del campo di gioco
 		startingOptions start = new startingOptions();
 		//aspetto che l'utente scelga la dimensione
